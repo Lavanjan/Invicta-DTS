@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Layout, Menu, Breadcrumb } from "antd";
 import "antd/dist/antd.css";
 import "./../index.css";
+import { Switch } from 'react-router-dom';
 
 import Body from "./../components/body/body";
 
@@ -25,7 +26,9 @@ export class Layouts extends Component {
               <Breadcrumb.Item>Invicta Defect Tracker System</Breadcrumb.Item>
             </Breadcrumb>
             <div className="site-layout-content">
+              <Switch>
             <Body />
+            </Switch>
             </div>
             
           </Content>

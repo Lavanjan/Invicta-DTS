@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import ReactDOM from 'react-dom';
+import { Link } from 'react-router-dom';
 
 import { Table, Input, Button, Space, Tag } from 'antd';
 import Highlighter from 'react-highlight-words';
@@ -247,8 +248,8 @@ export class ViewDefectDetails extends Component {
           ];
         return (
         <div>
+          <Link to = "/add-defect">
         <Button
-          onClick={this.handleAdd}
           type="primary"
           style={{
             marginBottom: 16,
@@ -256,6 +257,7 @@ export class ViewDefectDetails extends Component {
         >
           Add New Defect
         </Button>
+        </Link>
         <Table columns={columns} dataSource={data} />
         </div>
         );

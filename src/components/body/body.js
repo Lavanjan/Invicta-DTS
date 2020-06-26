@@ -8,8 +8,9 @@ export class body extends Component {
     render() {
         return (
             <div>
-                <ViewDefectDetails />
-                {/* <AddDefectDetails /> */}
+                {/* <ViewDefectDetails /> */}
+                <Route exact path = "/" component = { ViewDefectDetails } />
+                <Route path = "/add-defect" component = { AddDefectDetails } />
             </div>
         )
     }
