@@ -8,8 +8,8 @@ export class body extends Component {
     render() {
         return (
             <div>
-                {/* <ViewDefectDetails /> */}
-                <AddDefectDetails />
+                <ViewDefectDetails />
+                {/* <AddDefectDetails /> */}
             </div>
         )
     }
