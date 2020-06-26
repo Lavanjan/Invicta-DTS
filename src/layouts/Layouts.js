@@ -32,7 +32,7 @@ export class Layouts extends Component {
             
           </Content>
           <Footer style={{ textAlign: "center" }}>
-            Ant Design ©2018 Created by Ant UED
+            Invicta DTS ©2018 
           </Footer>
         </Layout>
       </div>
