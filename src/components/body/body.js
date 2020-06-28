@@ -3,6 +3,7 @@ import { Route } from 'react-router-dom';
 
 import ViewDefectDetails from './../viewDefectDetails/ViewDefectDetails';
 import AddDefectDetails from './../addDefectDetails/AddDefectDetails';
+import AddNewProjects from './../addNewProjects/AddNewProjects';
 
 export class body extends Component {
     render() {
@@ -10,7 +11,9 @@ export class body extends Component {
             <div>
                 {/* <ViewDefectDetails /> */}
                 <Route exact path = "/" component = { ViewDefectDetails } />
-                <Route path = "/add-defect" component = { AddDefectDetails } />
+                <Route path="/add-defect" component={AddDefectDetails} />
+                <Route path="/add-projects" component={AddNewProjects} />
+                
             </div>
         )
     }
