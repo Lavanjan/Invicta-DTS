@@ -1,12 +1,14 @@
 import React, { Component } from 'react'
 import { Typography } from 'antd';
-import { Form, Input, Button, Select,message} from 'antd';
+import { Form, Input, Button, Select, message } from 'antd';
 import { PageHeader } from 'antd';
-import {PlusCircleOutlined,ClearOutlined} from '@ant-design/icons';
+import { PlusCircleOutlined, ClearOutlined } from '@ant-design/icons';
+import { Link } from 'react-router-dom';
+
 
 const success = () => {
     message.success('This is a success message');
-  };
+};
 const { Option } = Select;
 const { TextArea } = Input;
 const { Title } = Typography;
@@ -28,12 +30,14 @@ const validateMessages = {
         range: '${label} must be between ${min} and ${max}',
     },
 };
+
 export class AddDefectDetails extends Component {
+    formRef = React.createRef();
 
     constructor(props) {
         super(props)
         this.state = {
-            
+
         }
     }
 
@@ -44,10 +48,9 @@ export class AddDefectDetails extends Component {
     };
 
     handleSubmit = (event) => {
-        alert("sss");
-        message.success('This is a success message')
-        event.preventDefault()
-       }
+        message.success('Add New Defect Successfully');
+        this.formRef.current.resetFields();
+    }
     render() {
 
         return (
@@ -55,9 +58,17 @@ export class AddDefectDetails extends Component {
                 <PageHeader
                     className="site-page-header"
                     onBack={() => null}
-                    title="Add New Defect"                    
-                />              
-                <Form {...layout} onFinish={this.handleSubmit} name="nest-messages" validateMessages={validateMessages}>
+                    title="Add New Defect"
+                />
+                <Form {...layout} onFinish={this.handleSubmit} ref={this.formRef} name="nest-messages" validateMessages={validateMessages}>
+                    <Form.Item
+                        name="defectId"
+                        label="Defect ID"
+                        value={this.state.defectId}
+                        onChange={this.handleChange}
+                    >
+                        <Input placeholder="DT001" disabled />
+                    </Form.Item>
                     <Form.Item
                         name="defect"
                         label="Defect"
@@ -91,7 +102,7 @@ export class AddDefectDetails extends Component {
                         name="type"
                         label="Type"
                         value={this.state.type}
-                        onChange={this.handleChange}                        
+                        onChange={this.handleChange}
                         rules={[
                             {
                                 required: true,
@@ -239,6 +250,17 @@ export class AddDefectDetails extends Component {
                         <Button type="primary" htmlType="submit" style={{ width: 100 }}>
                             <PlusCircleOutlined />  Submit
                         </Button>
+                        &nbsp;
+                        <Link to="/employee-allocation">
+                            <Button
+                                type="success"
+                                style={{
+                                    width:100
+                                }}
+                            >
+                                Add New Defect
+                            </Button>
+                        </Link>
 
                     </Form.Item>
                 </Form>
