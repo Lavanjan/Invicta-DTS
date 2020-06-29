@@ -249,18 +249,8 @@ export class AddDefectDetails extends Component {
                         &nbsp;
                         <Button type="primary" htmlType="submit" style={{ width: 100 }}>
                             <PlusCircleOutlined />  Submit
-                        </Button>
-                        &nbsp;
-                        <Link to="/employee-allocation">
-                            <Button
-                                type="success"
-                                style={{
-                                    width:100
-                                }}
-                            >
-                                Add New Defect
-                            </Button>
-                        </Link>
+                        </Button>                 
+                        
 
                     </Form.Item>
                 </Form>
