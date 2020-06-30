@@ -1,10 +1,8 @@
 import React, { Component } from 'react'
-import { Form, Input, Button, Select,Table,Popconfirm} from 'antd';
+import { Form, Input, Button, Select, Popconfirm } from 'antd';
 import { PlusCircleOutlined, ClearOutlined } from '@ant-design/icons';
-import {DeleteOutlined} from '@ant-design/icons';
 import { PageHeader } from 'antd';
-
-
+import Table from '../table/TableAllocatiion'
 
 const layout = {
     labelCol: {
@@ -15,89 +13,61 @@ const layout = {
     },
 };
 
+const validateMessages = {
+    required: '${label} is required!',
+}
 const { Option } = Select;
+
 export class EmplyeeAllocation extends Component {
+
+    formRef = React.createRef();
+
     constructor(props) {
+
         super(props);
-        this.state={
-            items:[],
-            currentItem:{
-                text:[],
-                key:''
-            }
-            
+        this.state = {
+            newEmployee: '',
+            data: '',
+            project: '',
+            employees: '',
+            currentEmployee: {
+                empName: [],
+                key: ''
+            },
+            dataSource: [],
+
         }        
-        this.columns = [
-            {
-                title: 'Name',
-                dataIndex: 'name',
-                width: '30%',               
-                
-            },
-            {
-                title: 'Roll As',
-                dataIndex: 'roll-as',
-                render: (text, record) =>
-                    this.state.dataSource.length >= 1 ? (
-                        <Select
-                            showSearch
-                            style={{ width: 200 }}
-                            placeholder="Select Roll As"
-                            optionFilterProp="children"                            
-                            filterOption={(input, option) =>
-                                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                            }
-                        >
-                            <Option value="04">Project Manager</Option>
-                            <Option value="05">Team Lead</Option>
-                        </Select>
-                    ) : null,
-            },                    
-            {
-                title: 'Operation',
-                dataIndex: 'operation',
-                render: (text, record) =>
-                    this.state.dataSource.length >= 1 ? (
-                        <Popconfirm title="Sure to delete?" onConfirm={() => this.handleDelete(record.key)}>
-                            <a><DeleteOutlined /></a>
-                        </Popconfirm>
-                    ) : null,
-            },
-            
-        ];
-        // this.state = {
-        //     dataSource: [
-        //         {
-        //             key: '0',
-        //             name: 'Edward King 0',
-                    
-                    
-        //         },
-        //         {
-        //             key: '1',
-        //             name: 'Edward King 1',
-                    
-                    
-        //         },
-        //     ],
-        //     count: 2,
-        // };
     }
 
-    handleDelete = key => {
-        const dataSource = [...this.state.dataSource];
+    handleChangeProject = (value) => {
         this.setState({
-            dataSource: dataSource.filter(item => item.key !== key),
+            project: value,
         });
     };
-    handleChange = (event) => {
+    handleChangeEmployee = (value) => {
         this.setState({
-            [event.target.name]: event.target.value,
+            currentEmployee: {
+                empName: value,
+                key: Date.now()
+            }
         });
-    };   
-    
-    render() {
-        const { dataSource } = this.state;        
+    }
+
+    handleSubmit = (event) => {
+        this.setState({
+            newEmployee: this.state.currentEmployee.empName,
+            currentEmployee: {
+                empName: ''
+            },
+
+        })
+        alert();
+
+
+        this.formRef.current.resetFields();
+    }
+
+    render() {        
         return (
             <div>
                 <PageHeader
@@ -105,13 +75,14 @@ export class EmplyeeAllocation extends Component {
                     onBack={() => null}
                     title="Allocate Employees"
                 />
-                <Form {...layout} name="employee-allocation" onFinish={this.onAdd}>
+                <Form {...layout} name="employee-allocation" onFinish={this.handleSubmit} ref={this.formRef} validateMessages={validateMessages}>
+
                     <Form.Item
                         name="project"
                         label="Project"
                         rules={[
                             {
-                                required: true,
+                                // required: true,
                             },
                         ]}
                     >
@@ -119,19 +90,17 @@ export class EmplyeeAllocation extends Component {
                             showSearch
                             style={{ width: 400 }}
                             placeholder="Select a Project"
-                            optionFilterProp="children"  
-                            name="project"
-                            value={this.state.project}
-                            onSelect={this.handleChange}                                       
+                            optionFilterProp="children"
+                            onChange={this.handleChangeProject}
                             filterOption={(input, option) =>
                                 option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                             }
                         >
-                            <Option value="01">Project-01</Option>
-                            <Option value="02">Project-02</Option>
-                            <Option value="03">Project-03</Option>
-                            <Option value="04">Project-04</Option>
-                            <Option value="05">Project-05</Option>
+                            <Option value="Project-01">Project-01</Option>
+                            <Option value="Project-02">Project-02</Option>
+                            <Option value="Project-03">Project-03</Option>
+                            <Option value="Project-04">Project-04</Option>
+                            <Option value="Project-05">Project-05</Option>
                         </Select>,
                 </Form.Item>
                     <Form.Item
@@ -139,47 +108,34 @@ export class EmplyeeAllocation extends Component {
                         label="Select Employee"
                         rules={[
                             {
-                                required: true,
-                            }
+                                // required: true,
+                            },
                         ]}>
-                        <Select                            
+                        <Select
                             mode="multiple"
                             style={{ width: 400 }}
                             placeholder="Please select"
                             placeholder="Select a Employee"
-                            optionFilterProp="children"                   
-                            name="employee"
-                            value={this.state.employee}
-                            onChange={this.handleChange}             
-                            
+                            optionFilterProp="children"
+                            onChange={this.handleChangeEmployee}
                             filterOption={(input, option) =>
                                 option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                             }
                         >
-                            <Option value="01">Employee-01</Option>
-                            <Option value="02">Employee-02</Option>
-                            <Option value="03">Employee-03</Option>
-                            <Option value="04">Employee-04</Option>
-                            <Option value="05">Employee-05</Option>
-                            <Option value="06">sivapiriyan-05</Option>
-                            <Option value="07">sivathanushan-05</Option>
-                            <Option value="08">sivakumar-05</Option>
+                            <Option value="sansikan">sansikan</Option>
+                            <Option value="lavanjan">lavanjan</Option>
+                            <Option value="sivapiriyan">sivapiriyan</Option>
+                            <Option value="sivathanushan">sivathanushan</Option>
+                            <Option value="sivakumar">sivakumar</Option>
                         </Select>
                         &nbsp;
                         <Button type="primary" htmlType="submit" style={{ width: 100 }}>
-                            <PlusCircleOutlined />  Add 
+                            <PlusCircleOutlined />  Add
                         </Button>
-                    </Form.Item>                    
-                </Form>
-                <Table                    
-                    // components={components}                    
-                    bordered
-                    dataSource={dataSource}
-                    columns={this.columns}
-                    style={{width:800,marginLeft:200}}
-                />
-            
+                    </Form.Item>
+                </Form>             
 
+                            <Table />
             </div >
         )
     }

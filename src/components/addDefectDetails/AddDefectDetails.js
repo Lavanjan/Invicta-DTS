@@ -60,7 +60,7 @@ export class AddDefectDetails extends Component {
                     onBack={() => null}
                     title="Add New Defect"
                 />
-                <Form {...layout} onFinish={this.handleSubmit} ref={this.formRef} name="nest-messages" validateMessages={validateMessages}>
+                <Form {...layout} onFinish={this.handleSubmit} ref={this.formRef} name="add-defect" validateMessages={validateMessages}>
                     <Form.Item
                         name="defectId"
                         label="Defect ID"
