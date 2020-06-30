@@ -15,7 +15,6 @@ export class body extends Component {
                 <Route path = "/add-defect" component = { AddDefectDetails } />
                 <Route path = "/employee-allocation" component = { EmployeeAllocation } />                
                 <Route path="/add-projects" component={AddNewProjects} />
-                
             </div>
         )
     }

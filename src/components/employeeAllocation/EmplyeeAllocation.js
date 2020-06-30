@@ -5,7 +5,6 @@ import {DeleteOutlined} from '@ant-design/icons';
 import { PageHeader } from 'antd';
 
 
-
 const layout = {
     labelCol: {
         span: 10,
@@ -65,23 +64,6 @@ export class EmplyeeAllocation extends Component {
             },
             
         ];
-        // this.state = {
-        //     dataSource: [
-        //         {
-        //             key: '0',
-        //             name: 'Edward King 0',
-                    
-                    
-        //         },
-        //         {
-        //             key: '1',
-        //             name: 'Edward King 1',
-                    
-                    
-        //         },
-        //     ],
-        //     count: 2,
-        // };
     }
 
     handleDelete = key => {

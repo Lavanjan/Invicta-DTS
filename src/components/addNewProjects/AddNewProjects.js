@@ -132,14 +132,12 @@ export class AddNewProjects extends Component {
           >
             <TextArea
               placeholder="Enter the description about project"
-              autoSize={{ minRows: 6, maxRows: 5 }}
+              autoSize={{ minRows: 7, maxRows: 5 }}
             />
           </Form.Item>
           <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 14 }}>
           <Button
-                  shape="round"
                   type="danger"
-                  size={size}
                 >
                   <CloseCircleOutlined />
                   Cancel
@@ -147,9 +145,7 @@ export class AddNewProjects extends Component {
             &nbsp;
             <Button
                   type="primary"
-                  shape="round"
                   icon={<AppstoreAddOutlined />}
-                  size={size}
                 >
                   Create
                 </Button>
