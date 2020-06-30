@@ -2,7 +2,11 @@ import React, { Component } from 'react'
 import { Form, Input, Button, Select, Popconfirm } from 'antd';
 import { PlusCircleOutlined, ClearOutlined } from '@ant-design/icons';
 import { PageHeader } from 'antd';
+<<<<<<< HEAD
 import Table from '../table/TableAllocatiion'
+=======
+
+>>>>>>> 8b6d084dd760f8f5246ebfe0f0e258ae343fce6b
 
 const layout = {
     labelCol: {
@@ -34,9 +38,14 @@ export class EmplyeeAllocation extends Component {
                 empName: [],
                 key: ''
             },
+<<<<<<< HEAD
             dataSource: [],
 
         }        
+=======
+            
+        ];
+>>>>>>> 8b6d084dd760f8f5246ebfe0f0e258ae343fce6b
     }
 
     handleChangeProject = (value) => {

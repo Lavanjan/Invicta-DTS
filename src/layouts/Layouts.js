@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Layout, Menu, Breadcrumb, Dropdown, Col } from "antd";
 import "antd/dist/antd.css";
 import "./../index.css";
-import { Switch } from "react-router-dom";
+import { Switch, Link } from "react-router-dom";
 import { SettingOutlined, DownOutlined, UserOutlined, UserAddOutlined, AppstoreAddOutlined, UserSwitchOutlined } from "@ant-design/icons";
 
 import Body from "./../components/body/body";
@@ -56,7 +56,9 @@ export class Layouts extends Component {
       <div>
         <Layout className="layout">
           <Header>
+            <Link to = "/">
             <div className="logo" />
+            </Link>
             <div className="sub">
               <Dropdown overlay={menu}>
                 <a
