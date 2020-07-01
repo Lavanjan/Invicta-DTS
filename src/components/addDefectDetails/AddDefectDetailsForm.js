@@ -1,9 +1,7 @@
 import React, { Component } from 'react'
 import { Typography } from 'antd';
 import { Form, Input, Button, Select, message } from 'antd';
-import { PageHeader } from 'antd';
 import { PlusCircleOutlined, ClearOutlined } from '@ant-design/icons';
-import { Link } from 'react-router-dom';
 
 
 const success = () => {
@@ -15,7 +13,7 @@ const { Title } = Typography;
 const layout = {
     labelCol: {
         span: 7,
-    },
+    }, 
     wrapperCol: {
         span: 11,
     },
@@ -31,48 +29,87 @@ const validateMessages = {
     },
 };
 
-export class AddDefectDetails extends Component {
-    formRef = React.createRef();
-
-    constructor(props) {
-        super(props)
-        this.state = {
-
-        }
-    }
+export class AddDefectDetailsForm extends Component {
+    formRef = React.createRef();    
+        state = {
+            defectId:'D001',
+            defect:'',
+            stepToRecreate:'',
+            type:'',
+            status:'',
+            severity:'',
+            priority:'',
+            enteredBy:'',
+            assignTo:'',
+            foundIn:'',
+            availableIn:''
+        }   
 
     handleChange = (event) => {
         this.setState({
             [event.target.name]: event.target.value,
-        });
-    };
+            
+        });   
+        
+    };  
+    handleTypeChange = value => {
+        this.setState({ type:value });
+      };
+      handleStatusChange = value => {
+        this.setState({ status:value });
+      };
+      handleSeverityChange = value => {
+        this.setState({ severity:value });
+      };
+      handlePriorityChange = value => {
+        this.setState({ priority:value });
+      };
+      handleEnteredByChange = value => {
+        this.setState({ enteredBy:value });
+      };
+      handleAssignToChange = value => {
+        this.setState({assignTo:value });
+      };
+      handleFoundInChange = value => {
+        this.setState({foundIn:value });
+      };
+      handleAvailableInChange = value => {
+        this.setState({availableIn:value });
+      };
 
-    handleSubmit = (event) => {
-        message.success('Add New Defect Successfully');
+    handleSubmit = (event) => {  
+        alert(this.state.type);                    
+        const defects={
+            defectsId:this.state.defectId,
+            defectsName:this.state.defect,
+            stepToRecreate:this.state.stepToRecreate,
+            type:this.state.type,
+            status:this.state.status,
+            severity:this.state.severity,
+            priority:this.state.priority,
+            enteredBy:this.state.enteredBy,
+            assignTo:this.state.assignTo,
+            foundIn:this.state.foundIn,
+            availableIn:this.state.availableIn
+        }      
+        console.log(defects);  
+        this.props.adddefect(defects);
+        message.success('Add New Defect Successfully'); 
         this.formRef.current.resetFields();
     }
     render() {
-
         return (
             <div>
-                <PageHeader
-                    className="site-page-header"
-                    onBack={() => null}
-                    title="Add New Defect"
-                />
                 <Form {...layout} onFinish={this.handleSubmit} ref={this.formRef} name="add-defect" validateMessages={validateMessages}>
-                    <Form.Item
-                        name="defectId"
-                        label="Defect ID"
-                        value={this.state.defectId}
+                    <Form.Item                        
+                        label="Defect ID"                        
                         onChange={this.handleChange}
                     >
-                        <Input placeholder="DT001" disabled />
+                        <Input placeholder="DT001" disabled name="defectId" />
                     </Form.Item>
                     <Form.Item
-                        name="defect"
-                        label="Defect"
-                        value={this.state.defect}
+                        
+                        label="Defect"                        
                         onChange={this.handleChange}
                         rules={[
                             {
@@ -80,12 +117,10 @@ export class AddDefectDetails extends Component {
                             },
                         ]}
                     >
-                        <Input placeholder="Defect" />
+                        <Input placeholder="Defect" name="defect" />
                     </Form.Item>
-                    <Form.Item
-                        name="description"
-                        label="Description"
-                        value={this.state.description}
+                    <Form.Item                        
+                        label="step To Recreate"                        
                         onChange={this.handleChange}
                         rules={[
                             {
@@ -94,38 +129,35 @@ export class AddDefectDetails extends Component {
                         ]}
                     >
                         <TextArea
-                            placeholder="Enter Brief Description"
+                            placeholder="Step To Recreate......."
                             autoSize={{ minRows: 3, maxRows: 5 }}
+                            name="stepToRecreate"
                         />
                     </Form.Item>
-                    <Form.Item
-                        name="type"
-                        label="Type"
-                        value={this.state.type}
-                        onChange={this.handleChange}
+                    <Form.Item                        
+                        label="Type"                        
+                        
                         rules={[
                             {
                                 required: true,
                             },
                         ]}
                     >
-                        <Select defaultValue="Type" style={{ width: 550 }}>
-                            <Option value="Front_End">Front End</Option>
-                            <Option value="Back_End">Back End</Option>
+                        <Select value={this.state.type} style={{ width: 550 }} name="type"  onChange={this.handleTypeChange}>
+                            <Option value="Front End">Front End</Option>
+                            <Option value="Back End">Back End</Option>
                         </Select>
                     </Form.Item>
-                    <Form.Item
-                        name="status"
-                        label="Status"
-                        value={this.state.status}
-                        onChange={this.handleChange}
+                    <Form.Item                        
+                        label="Status"                        
+                        
                         rules={[
                             {
                                 required: true,
                             },
                         ]}
                     >
-                        <Select defaultValue="Status" style={{ width: 550 }}>
+                        <Select value={this.state.status} style={{ width: 550 }} name="status" onChange={this.handleStatusChange}>
                             <Option value="New">New</Option>
                             <Option value="Open">Open</Option>
                             <Option value="Fixed">Fixed</Option>
@@ -134,107 +166,95 @@ export class AddDefectDetails extends Component {
                             <Option value="Postpone">Postpone</Option>
                         </Select>
                     </Form.Item>
-                    <Form.Item
-                        name="serverity"
-                        label="Serverity"
-                        value={this.state.serverity}
-                        onChange={this.handleChange}
+                    <Form.Item                        
+                        label="Serverity"                        
+                       
                         rules={[
                             {
                                 required: true,
                             },
                         ]}
                     >
-                        <Select defaultValue="Serverity" style={{ width: 550 }}>
+                        <Select value={this.state.severity} style={{ width: 550 }} name="severity" onChange={this.handleSeverityChange}>
                             <Option value="High">High</Option>
                             <Option value="Medium">Medium</Option>
                             <Option value="Low">Low</Option>
                         </Select>
                     </Form.Item>
-                    <Form.Item
-                        name="priority"
-                        label="Priority"
-                        value={this.state.priority}
-                        onChange={this.handleChange}
+                    <Form.Item                        
+                        label="Priority"                        
+                        
                         rules={[
                             {
                                 required: true,
                             },
                         ]}
                     >
-                        <Select defaultValue="Priority" style={{ width: 550 }}>
+                        <Select value={this.state.priority} style={{ width: 550 }} name="priority" onChange={this.handlePriorityChange}>
                             <Option value="High">High</Option>
                             <Option value="Medium">Medium</Option>
                             <Option value="Low">Low</Option>
                         </Select>
                     </Form.Item>
 
-                    <Form.Item
-                        name="entered_By"
-                        label="Entered By"
-                        value={this.state.entered_By}
-                        onChange={this.handleChange}
+                    <Form.Item                        
+                        label="Entered By"                        
+                        
                         rules={[
                             {
                                 required: true,
                             },
                         ]}
                     >
-                        <Select defaultValue="Entered By" style={{ width: 550 }}>
+                        <Select value={this.state.enteredBy} style={{ width: 550 }} name="enteredBy" onChange={this.handleEnteredByChange}>
                             <Option value="Sanjsijan">Sanjsijan</Option>
                             <Option value="Lavanjan">Lavanjan</Option>
                             <Option value="Sivapiriyan">Sivapiriyan</Option>
                             <Option value="Gobika">Gobika</Option>
                         </Select>
                     </Form.Item>
-                    <Form.Item
-                        name="assign_To"
-                        label="Assign To"
-                        value={this.state.assign_To}
-                        onChange={this.handleChange}
+                    <Form.Item                        
+                        label="Assign To"                        
+                        
                         rules={[
                             {
                                 required: true,
                             },
                         ]}
                     >
-                        <Select defaultValue="Assign To" style={{ width: 550 }}>
+                        <Select value={this.state.assignTo} style={{ width: 550 }} name="assignTo" onChange={this.handleAssignToChange}>
                             <Option value="Sanjsijan">Sanjsijan</Option>
                             <Option value="Lavanjan">Lavanjan</Option>
                             <Option value="Sivapiriyan">Sivapiriyan</Option>
                             <Option value="Gobika">Gobika</Option>
                         </Select>
                     </Form.Item>
-                    <Form.Item
-                        name="found_In"
-                        label="Found In"
-                        value={this.state.found_In}
-                        onChange={this.handleChange}
+                    <Form.Item                        
+                        label="Found In"                        
+                        
                         rules={[
                             {
                                 required: true,
                             },
                         ]}
                     >
-                        <Select defaultValue="Found In" style={{ width: 550 }}>
+                        <Select value={this.state.foundIn} style={{ width: 550 }} name="foundIn" onChange={this.handleFoundInChange}>
                             <Option value="Rel-1">Rel-1</Option>
                             <Option value="Rel-2">Rel-2</Option>
                             <Option value="Rel-3">Rel-3</Option>
                             <Option value="Rel-4">Rel-4</Option>
                         </Select>
                     </Form.Item>
-                    <Form.Item
-                        name="available_In"
-                        label="Aailable In"
-                        value={this.state.available_In}
-                        onChange={this.handleChange}
+                    <Form.Item                        
+                        label="Aailable In"                       
+                        
                         rules={[
                             {
                                 required: true,
                             },
                         ]}
                     >
-                        <Select defaultValue="Available In" style={{ width: 550 }}>
+                        <Select value={this.state.availableIn} style={{ width: 550 }} name="availableIn" onChange={this.handleAvailableInChange}>
                             <Option value="Rel-1">Rel-1</Option>
                             <Option value="Rel-2">Rel-2</Option>
                             <Option value="Rel-3">Rel-3</Option>
@@ -254,10 +274,9 @@ export class AddDefectDetails extends Component {
 
                     </Form.Item>
                 </Form>
-
             </div>
         )
     }
 }
 
-export default AddDefectDetails
+export default AddDefectDetailsForm
