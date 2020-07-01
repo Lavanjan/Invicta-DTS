@@ -7,6 +7,7 @@ import AddDefectDetailsForm from '../addDefectDetails/AddDefectDetailsForm'
 import { withRouter } from 'react-router-dom';
 
 
+
 export class AddDefectDetails extends Component {
   
     state={
@@ -18,12 +19,16 @@ export class AddDefectDetails extends Component {
           .then(() =>  message.error(nextProps.msg,2.5))
         }
         else{
-          message.loading('Action in progress..', 2.5)
-          .then(() => message.success(nextProps.msg, 2.5))
-          .then(()=>this.props.history.push('/') )
-        }
+          message.loading('Action in progress..')
+          .then(() => message.success(nextProps.msg))
+
+
+        }   
         
-      }  
+        this.props.history.push('/'); 
+        window.location.reload();    
+      } 
+
     render() {
 
         return (
@@ -46,6 +51,7 @@ const mapStateToProps = state => ({
   const mapDispatchToProps = (dispatch, ownProps) => {
     return {
         adddefect: (defect) => { dispatch(adddefect(defect)) },
+        
     }
   }
 

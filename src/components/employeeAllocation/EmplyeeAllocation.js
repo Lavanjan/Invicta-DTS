@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Form, Input, Button, Select, Table, Popconfirm,Pagination} from 'antd';
+import { Form, Input, Button, Select, Table, Popconfirm, Pagination } from 'antd';
 import { PlusCircleOutlined, ClearOutlined } from '@ant-design/icons';
 import { DeleteOutlined } from '@ant-design/icons';
 import { PageHeader } from 'antd';
@@ -8,7 +8,7 @@ import { PageHeader } from 'antd';
 
 const layout = {
     labelCol: {
-        span: 10,
+        span: 8,
     },
     wrapperCol: {
         span: 16,
@@ -21,6 +21,7 @@ export class EmplyeeAllocation extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            employee:[],
             project: '',
             dataSource: [],
 
@@ -79,107 +80,131 @@ export class EmplyeeAllocation extends Component {
     handleEmployeeChange = (value) => {
         // for (var i = 0; i < this.state.dataSource.length; i++) {
         //     if (value != this.state.dataSource.name) {
-                this.setState({
+        this.setState({
 
 
-                    dataSource: [...this.state.dataSource,
-                    {
-                        name: value,
-                        key: Date.now()
-                    },
-                    ]
-                });
-            }
+            dataSource: [...this.state.dataSource,
+            {
+                name: value,
+                key: Date.now()
+            },
+            ]
+        });
+    }
     //     }
     // }
     onAddEmployee = (e) => {
+        const project = this.state.project
+            for(let i=0;i<this.state.dataSource.length;i++){
+                this.setState({
+                    employee:[...this.state.employee,this.state.dataSource[i].name],
+                    
+                })
+                
+            }
+            alert(this.state.employee)
+            this.setState({
+                dataSource:[],
+                employee:[]
 
-console.log(this.state.dataSource)
+            })  
+            
+            
     }
 
-render() {
-    const { dataSource } = this.state;
-    return (
-        <div>
-            <PageHeader
-                className="site-page-header"
-                onBack={() => null}
-                title="Allocate Employees"
-            />
-            <Form {...layout} name="employee-allocation" onFinish={this.onAddEmployee}>
-                <Form.Item
-                    name="select-project"
-                    label="Project"
-                    rules={[
-                        {
-                            // required: true,
-                        },
-                    ]}
-                >
-                    <Select
-                        showSearch
-                        style={{ width: 400 }}
-                        placeholder="Select a Project"
-                        optionFilterProp="children"
-                        name="project"
-                        value={this.state.project}
-                        onSelect={this.handleProjectChange}
-                        filterOption={(input, option) =>
-                            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                        }
+    render() {
+        const { dataSource } = this.state;
+        return (
+            <div>
+                <PageHeader
+                    className="site-page-header"
+                    onBack={() => null}
+                    title="Allocate Employees"
+                />
+                <Form {...layout} name="employee-allocation" onFinish={this.onAddEmployee}>
+                    <Form.Item
+                        name="select-project"
+                        label="Project"
+                        rules={[
+                            {
+                                // required: true,
+                            },
+                        ]}
                     >
-                        <Option value="01">Project-01</Option>
-                        <Option value="02">Project-02</Option>
-                        <Option value="03">Project-03</Option>
-                        <Option value="04">Project-04</Option>
-                        <Option value="05">Project-05</Option>
-                    </Select>,
+                        <Select
+                            showSearch
+                            style={{ width: 400 }}
+                            placeholder="Select a Project"
+                            optionFilterProp="children"
+                            name="project"                            
+                            onSelect={this.handleProjectChange}
+                            filterOption={(input, option) =>
+                                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                            }
+                        >
+                            <Option value="01">Project-01</Option>
+                            <Option value="02">Project-02</Option>
+                            <Option value="03">Project-03</Option>
+                            <Option value="04">Project-04</Option>
+                            <Option value="05">Project-05</Option>
+                        </Select>,
                 </Form.Item>
-                <Form.Item
-                    name="select-employee"
-                    label="Select Employee"
-                    rules={[
-                        {
-                            // required: true,
-                        }
-                    ]}>
-                    <Select
-                        // mode="multiple"
-                        style={{ width: 400 }}
-                        placeholder="Please select"
-                        placeholder="Select a Employee"
-                        optionFilterProp="children"
-                        name="employee"
-                        value={this.state.employee}
-                        onChange={this.handleEmployeeChange}
+                    <Form.Item
+                        name="select-employee"
+                        label="Select Employee"
+                        rules={[
+                            {
+                                // required: true,
+                            }
+                        ]}>
+                        <Select
+                            // mode="multiple"
+                            style={{ width: 400 }}                            
+                            placeholder="Select a Employee"
+                            optionFilterProp="children"
+                            name="employee"                            
+                            onChange={this.handleEmployeeChange}
 
-                        filterOption={(input, option) =>
-                            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                        }
-                    >
-                        <Option value="sivapiriyan">sivapiriyan</Option>
-                        <Option value="sivathanushan">sivathanushan</Option>
-                        <Option value="sivakumar">sivakumar</Option>
-                    </Select>
-                    &nbsp;
-                        <Button type="primary" htmlType="submit" style={{ width: 100 }}>
-                        <PlusCircleOutlined />  Add
+                            filterOption={(input, option) =>
+                                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                            }
+                        >
+                            <Option value="sivapiriyan">sivapiriyan</Option>
+                            <Option value="sivathanushan">sivathanushan</Option>
+                            <Option value="sivakumar">sivakumar</Option>
+                        </Select>
+
+                    </Form.Item>
+                    <Form.Item>
+                        <Table
+                            // components={components}                    
+                            bordered
+                            dataSource={dataSource}
+                            columns={this.columns}
+                            style={{ width: 800, marginLeft: 200 }}
+                        />
+                    </Form.Item>
+                    <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 16 }}>
+                        <Button type="danger" style={{ width: 100 }}>
+                            <ClearOutlined />
+                            Clear
                         </Button>
-                </Form.Item>
-            </Form>
-            <Table
-                // components={components}                    
-                bordered
-                dataSource={dataSource}
-                columns={this.columns}
-                style={{ width: 800, marginLeft: 200 }}                
-            />
-            
+                        &nbsp;
+                        <Button type="primary" htmlType="submit" style={{ width: 100 }}>
+                            <PlusCircleOutlined />  Submit
+                        </Button>
 
 
-        </div >
-    )
-}
+                    </Form.Item>
+
+                </Form>
+
+
+
+
+            </div >
+        )
+    }
 }
 
 export default EmplyeeAllocation

@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import { Typography } from 'antd';
-import { Form, Input, Button, Select,} from 'antd';
+import { Form, Input, Button, Select,message} from 'antd';
 import { PlusCircleOutlined, ClearOutlined } from '@ant-design/icons';
+import { withRouter } from 'react-router-dom';
 
 
 const { Option } = Select;
@@ -75,7 +76,7 @@ export class AddDefectDetailsForm extends Component {
         this.setState({ availableIn: value });
     };
 
-    handleSubmit = (event) => {
+    handleSubmit = (event) => {        
         const defects = {
             defectsId: this.state.defectId,
             defectsName: this.state.defect,
@@ -89,7 +90,8 @@ export class AddDefectDetailsForm extends Component {
             foundIn: this.state.foundIn,
             availableIn: this.state.availableIn
         }
-        this.props.adddefect(defects);    
+        this.props.adddefect(defects);        
+        this.formRef.current.resetFields();      
         
         
     }
@@ -279,4 +281,4 @@ export class AddDefectDetailsForm extends Component {
     }
 }
 
-export default AddDefectDetailsForm
+export default withRouter(AddDefectDetailsForm)
