@@ -2,8 +2,6 @@ import React, { Component } from "react";
 import { Typography } from "antd";
 import { Form, Input, Button, Select, message } from "antd";
 import { PageHeader } from "antd";
-import { PlusCircleOutlined, ClearOutlined } from "@ant-design/icons";
-import Item from "antd/lib/list/Item";
 import { CloseCircleOutlined } from "@ant-design/icons";
 import { AppstoreAddOutlined } from "@ant-design/icons";
 
@@ -23,11 +21,6 @@ const layout = {
 };
 
 const employees = ["Lavanjan", "Sivapiriyan", "Sansjigan", "Gobiha"];
-// for (let i = 10; i < 36; i++) {
-//   children.push(
-//     <Option key={i.toString(36) + 1}> {i.toString(36) + i} </Option>
-//   );
-// }
 
 const validateMessages = {
   required: "${label} is required!",
@@ -45,23 +38,11 @@ export class AddNewProjects extends Component {
   state = {
     nameOfTheProject: "",
     employeeAllocation: [],
-    size: "large" 
-  };
-  // this.handleChange = this.handleChange.bind(this);
-  // this.handleSubmit = this.handleSubmit.bind(this);
-  // }
-
-  //   handleOnChange = (data) => {
-  //     console.log(`selected ${data}`);
-  //   };
-
-  handleChange = (event) => {
-    this.setState({
-      [event.target.name]: event.target.value,
-    });
+    description: "",
   };
 
   handleSubmit = (event) => {
+    console.log(this.state.name);
     message.success("This is a success message");
     event.preventDefault();
   };
@@ -74,14 +55,10 @@ export class AddNewProjects extends Component {
 
     return (
       <div>
-        <PageHeader
-          className="site-page-header"
-          onBack={() => null}
-          title="Add New Project"
-        />
         <Form
-          {...layout}
           onFinish={this.handleSubmit}
+          {...layout}
+          autoComplete="off"
           name="nest-messages"
           validateMessages={validateMessages}
         >
@@ -89,7 +66,6 @@ export class AddNewProjects extends Component {
             name="nameOfTheProject"
             label="Name of the Project"
             value={this.state.nameOfTheProject}
-            onChange={this.handleChange}
             rules={[
               {
                 required: true,
@@ -98,7 +74,7 @@ export class AddNewProjects extends Component {
           >
             <Input placeholder="Name of the project" />
           </Form.Item>
-          
+
           <Form.Item
             name="employeeAllocation"
             label="Employees"
@@ -109,7 +85,7 @@ export class AddNewProjects extends Component {
               mode="multiple"
               style={{ width: "100%" }}
               placeholder="Select Employees for this project"
-              onChange={this.handleOnChange}
+              onChange={this.handleChange}
               allowClear={true}
             >
               {filteredOptions.map((data) => (
@@ -136,19 +112,18 @@ export class AddNewProjects extends Component {
             />
           </Form.Item>
           <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 14 }}>
-          <Button
-                  type="danger"
-                >
-                  <CloseCircleOutlined />
-                  Cancel
-                </Button>
+            <Button type="danger">
+              <CloseCircleOutlined />
+              Cancel
+            </Button>
             &nbsp;
             <Button
-                  type="primary"
-                  icon={<AppstoreAddOutlined />}
-                >
-                  Create
-                </Button>
+              type="submit"
+              htmlType="submit"
+              icon={<AppstoreAddOutlined />}
+            >
+              Create
+            </Button>
           </Form.Item>
         </Form>
       </div>

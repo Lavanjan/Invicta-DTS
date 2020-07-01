@@ -3,7 +3,7 @@ import { Route } from 'react-router-dom';
 import ViewDefectDetails from './../viewDefectDetails/ViewDefectDetails';
 import AddDefectDetails from './../addDefectDetails';
 import EmployeeAllocation from './../employeeAllocation/EmplyeeAllocation'
-import AddNewProjects from './../addNewProjects/AddNewProjects';
+import AddNewProjects from './../addNewProjects';
 
 
 export class body extends Component {
