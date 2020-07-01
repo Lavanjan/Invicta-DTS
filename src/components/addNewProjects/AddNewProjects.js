@@ -36,16 +36,31 @@ export class AddNewProjects extends Component {
   // constructor(props) {
   //     super(props)
   state = {
+    projectId: "pr0001",
     nameOfTheProject: "",
-    employeeAllocation: [],
+    employeeAllocation: 'Lavan',
     description: "",
   };
 
+
   handleSubmit = (event) => {
-    console.log(this.state.name);
-    message.success("This is a success message");
-    event.preventDefault();
+    alert(this.state.nameOfTheProject)
+    const project = {
+      projectId: this.state.projectId,
+      projectName: this.state.nameOfTheProject,
+      projectDescription: this.state.description,
+      projectEmployees:this.state.employeeAllocation,
+    }
+    this.props.addProjects(project);
+    alert(project.projectDescription);
   };
+
+  handleChange = (event) => {
+    this.setState({
+        [event.target.name]: event.target.value,
+    });
+  }
+
   render() {
     const { employeeAllocation } = this.state;
     const filteredOptions = employees.filter(
@@ -63,22 +78,23 @@ export class AddNewProjects extends Component {
           validateMessages={validateMessages}
         >
           <Form.Item
-            name="nameOfTheProject"
+            name = "nameOftheProjectLabel"
             label="Name of the Project"
-            value={this.state.nameOfTheProject}
+            // value={this.state.nameOfTheProject}
             rules={[
               {
                 required: true,
               },
             ]}
           >
-            <Input placeholder="Name of the project" />
+            <Input placeholder="Name of the project" name="nameOfTheProject"
+            onChange = { this.handleChange }/>
           </Form.Item>
 
           <Form.Item
             name="employeeAllocation"
             label="Employees"
-            value={this.state.employeeAllocation}
+            // value={this.state.employeeAllocation}
             onChange={this.handleChange}
           >
             <Select
@@ -96,10 +112,9 @@ export class AddNewProjects extends Component {
             </Select>
           </Form.Item>
           <Form.Item
-            name="description"
+            name="descriptionLabel"
             label="Description"
-            value={this.state.description}
-            onChange={this.handleChange}
+            
             rules={[
               {
                 required: true,
@@ -109,6 +124,8 @@ export class AddNewProjects extends Component {
             <TextArea
               placeholder="Enter the description about project"
               autoSize={{ minRows: 7, maxRows: 5 }}
+              onChange={this.handleChange}
+              name="description"
             />
           </Form.Item>
           <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 14 }}>
