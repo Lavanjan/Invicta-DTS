@@ -1,19 +1,26 @@
 import React, { Component } from 'react'
-import { Typography } from 'antd';
-import { Form, Input, Button, Select, message } from 'antd';
+import { message } from 'antd';
 import { PageHeader } from 'antd';
-import { PlusCircleOutlined, ClearOutlined } from '@ant-design/icons';
-import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import {adddefect} from '../redux/action/ActionDefect';
 import AddDefectDetailsForm from '../addDefectDetails/AddDefectDetailsForm'
+import { withRouter } from 'react-router-dom';
 
 
 export class AddDefectDetails extends Component {
-
+  
+    state={
+      err:'err'
+    }
     componentWillReceiveProps(nextProps) {
-        if (nextProps.msg) {
-          alert(nextProps.msg)
+        if (nextProps.msg === this.state.err) {   
+          message.loading('Action in progress..', 2.5)       
+          .then(() =>  message.error(nextProps.msg,2.5))
+        }
+        else{
+          message.loading('Action in progress..', 2.5)
+          .then(() => message.success(nextProps.msg, 2.5))
+          .then(()=>this.props.history.push('/') )
         }
         
       }  
@@ -42,4 +49,4 @@ const mapStateToProps = state => ({
     }
   }
 
-export default connect(mapStateToProps,mapDispatchToProps)(AddDefectDetails);
+export default connect(mapStateToProps,mapDispatchToProps)(withRouter(AddDefectDetails));

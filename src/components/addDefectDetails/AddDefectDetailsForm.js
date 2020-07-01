@@ -1,23 +1,21 @@
 import React, { Component } from 'react'
 import { Typography } from 'antd';
-import { Form, Input, Button, Select, message } from 'antd';
+import { Form, Input, Button, Select,} from 'antd';
 import { PlusCircleOutlined, ClearOutlined } from '@ant-design/icons';
 
 
-const success = () => {
-    message.success('This is a success message');
-};
 const { Option } = Select;
 const { TextArea } = Input;
 const { Title } = Typography;
 const layout = {
     labelCol: {
         span: 7,
-    }, 
+    },
     wrapperCol: {
         span: 11,
     },
 };
+
 const validateMessages = {
     required: '${label} is required!',
     types: {
@@ -30,87 +28,87 @@ const validateMessages = {
 };
 
 export class AddDefectDetailsForm extends Component {
-    formRef = React.createRef();    
-        state = {
-            defectId:'D001',
-            defect:'',
-            stepToRecreate:'',
-            type:'',
-            status:'',
-            severity:'',
-            priority:'',
-            enteredBy:'',
-            assignTo:'',
-            foundIn:'',
-            availableIn:''
-        }   
+    formRef = React.createRef();
+    state = {
+        defectId: 'DF001',
+        defect: '',
+        stepToRecreate: '',
+        type: '',
+        status: '',
+        severity: '',
+        priority: '',
+        enteredBy: '',
+        assignTo: '',
+        foundIn: '',
+        availableIn: ''
+    }
 
     handleChange = (event) => {
         this.setState({
             [event.target.name]: event.target.value,
-            
-        });   
-        
-    };  
-    handleTypeChange = value => {
-        this.setState({ type:value });
-      };
-      handleStatusChange = value => {
-        this.setState({ status:value });
-      };
-      handleSeverityChange = value => {
-        this.setState({ severity:value });
-      };
-      handlePriorityChange = value => {
-        this.setState({ priority:value });
-      };
-      handleEnteredByChange = value => {
-        this.setState({ enteredBy:value });
-      };
-      handleAssignToChange = value => {
-        this.setState({assignTo:value });
-      };
-      handleFoundInChange = value => {
-        this.setState({foundIn:value });
-      };
-      handleAvailableInChange = value => {
-        this.setState({availableIn:value });
-      };
 
-    handleSubmit = (event) => {  
-        alert(this.state.type);                    
-        const defects={
-            defectsId:this.state.defectId,
-            defectsName:this.state.defect,
-            stepToRecreate:this.state.stepToRecreate,
-            type:this.state.type,
-            status:this.state.status,
-            severity:this.state.severity,
-            priority:this.state.priority,
-            enteredBy:this.state.enteredBy,
-            assignTo:this.state.assignTo,
-            foundIn:this.state.foundIn,
-            availableIn:this.state.availableIn
-        }      
-        console.log(defects);  
-        this.props.adddefect(defects);
-        message.success('Add New Defect Successfully'); 
-        this.formRef.current.resetFields();
+        });
+
+    };
+    handleTypeChange = value => {
+        this.setState({ type: value });
+    };
+    handleStatusChange = value => {
+        this.setState({ status: value });
+    };
+    handleSeverityChange = value => {
+        this.setState({ severity: value });
+    };
+    handlePriorityChange = value => {
+        this.setState({ priority: value });
+    };
+    handleEnteredByChange = value => {
+        this.setState({ enteredBy: value });
+    };
+    handleAssignToChange = value => {
+        this.setState({ assignTo: value });
+    };
+    handleFoundInChange = value => {
+        this.setState({ foundIn: value });
+    };
+    handleAvailableInChange = value => {
+        this.setState({ availableIn: value });
+    };
+
+    handleSubmit = (event) => {
+        const defects = {
+            defectsId: this.state.defectId,
+            defectsName: this.state.defect,
+            stepToRecreate: this.state.stepToRecreate,
+            type: this.state.type,
+            status: this.state.status,
+            severity: this.state.severity,
+            priority: this.state.priority,
+            enteredBy: this.state.enteredBy,
+            assignTo: this.state.assignTo,
+            foundIn: this.state.foundIn,
+            availableIn: this.state.availableIn
+        }
+        this.props.adddefect(defects);    
+        
+        
     }
     render() {
         return (
             <div>
                 <Form {...layout} onFinish={this.handleSubmit} ref={this.formRef} name="add-defect" validateMessages={validateMessages}>
-                    <Form.Item                        
-                        label="Defect ID"                        
+                    <Form.Item
+                        label="Defect ID"
                         onChange={this.handleChange}
+                        name="defectIdLabel"                        
                     >
-                        <Input placeholder="DT001" disabled name="defectId" />
+                        <Input placeholder="DF001" disabled name="defectId" />
                     </Form.Item>
                     <Form.Item
-                        
-                        label="Defect"                        
+
+                        label="Defect"
                         onChange={this.handleChange}
+                        name="defectLabel"
                         rules={[
                             {
                                 required: true,
@@ -119,8 +117,9 @@ export class AddDefectDetailsForm extends Component {
                     >
                         <Input placeholder="Defect" name="defect" />
                     </Form.Item>
-                    <Form.Item                        
-                        label="step To Recreate"                        
+                    <Form.Item
+                        name="stepToRecreateLabel"
+                        label="Step to Recreate"
                         onChange={this.handleChange}
                         rules={[
                             {
@@ -129,28 +128,29 @@ export class AddDefectDetailsForm extends Component {
                         ]}
                     >
                         <TextArea
-                            placeholder="Step To Recreate......."
+                            placeholder="Step to recreate......."
                             autoSize={{ minRows: 3, maxRows: 5 }}
                             name="stepToRecreate"
                         />
                     </Form.Item>
-                    <Form.Item                        
-                        label="Type"                        
-                        
+                    <Form.Item
+                        label="Type"
+                        name="typeLabel"
                         rules={[
                             {
                                 required: true,
                             },
                         ]}
                     >
-                        <Select value={this.state.type} style={{ width: 550 }} name="type"  onChange={this.handleTypeChange}>
+                        <Select value={this.state.type} style={{ width: 550 }} name="type" onChange={this.handleTypeChange}>
                             <Option value="Front End">Front End</Option>
                             <Option value="Back End">Back End</Option>
+                            <Option value="UI">UI</Option>
                         </Select>
                     </Form.Item>
-                    <Form.Item                        
-                        label="Status"                        
-                        
+                    <Form.Item
+                        label="Status"
+                        name="statusLabel"
                         rules={[
                             {
                                 required: true,
@@ -166,9 +166,9 @@ export class AddDefectDetailsForm extends Component {
                             <Option value="Postpone">Postpone</Option>
                         </Select>
                     </Form.Item>
-                    <Form.Item                        
-                        label="Serverity"                        
-                       
+                    <Form.Item
+                        label="Serverity"
+                        name="severityLabel"
                         rules={[
                             {
                                 required: true,
@@ -181,9 +181,9 @@ export class AddDefectDetailsForm extends Component {
                             <Option value="Low">Low</Option>
                         </Select>
                     </Form.Item>
-                    <Form.Item                        
-                        label="Priority"                        
-                        
+                    <Form.Item
+                        label="Priority"
+                        name="priorityLabel"
                         rules={[
                             {
                                 required: true,
@@ -197,9 +197,9 @@ export class AddDefectDetailsForm extends Component {
                         </Select>
                     </Form.Item>
 
-                    <Form.Item                        
-                        label="Entered By"                        
-                        
+                    <Form.Item
+                        label="Entered By"
+                        name="enteredByLabel"
                         rules={[
                             {
                                 required: true,
@@ -213,9 +213,9 @@ export class AddDefectDetailsForm extends Component {
                             <Option value="Gobika">Gobika</Option>
                         </Select>
                     </Form.Item>
-                    <Form.Item                        
-                        label="Assign To"                        
-                        
+                    <Form.Item
+                        label="Assign To"
+                        name="assignToLabel"
                         rules={[
                             {
                                 required: true,
@@ -229,9 +229,9 @@ export class AddDefectDetailsForm extends Component {
                             <Option value="Gobika">Gobika</Option>
                         </Select>
                     </Form.Item>
-                    <Form.Item                        
-                        label="Found In"                        
-                        
+                    <Form.Item
+                        label="Found In"
+                        name="foundInLabel"
                         rules={[
                             {
                                 required: true,
@@ -245,9 +245,9 @@ export class AddDefectDetailsForm extends Component {
                             <Option value="Rel-4">Rel-4</Option>
                         </Select>
                     </Form.Item>
-                    <Form.Item                        
-                        label="Aailable In"                       
-                        
+                    <Form.Item
+                        label="Aailable In"
+                        name="availableInLabel"
                         rules={[
                             {
                                 required: true,
@@ -269,8 +269,8 @@ export class AddDefectDetailsForm extends Component {
                         &nbsp;
                         <Button type="primary" htmlType="submit" style={{ width: 100 }}>
                             <PlusCircleOutlined />  Submit
-                        </Button>                 
-                        
+                        </Button>
+
 
                     </Form.Item>
                 </Form>
