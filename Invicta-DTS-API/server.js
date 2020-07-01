@@ -25,7 +25,7 @@ const projectsRouter = require('./routes/projects');
 
 app.use('/defects', defectsRouter);
 app.use('/employees', employeesRouter);
-app.use('projects', projectsRouter);
+app.use('/projects', projectsRouter);
 
 
 app.listen(port, ()=> {
