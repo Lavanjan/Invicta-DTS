@@ -6,13 +6,13 @@ export const adddefect = defect => dispatch => {
       .then(res =>
         dispatch({
           type: ADD_DEFECT,
-          payload: {msg:'success',data:defect}
+          payload: {msg:'Successfully add a defect',data:defect}
         })
       )
       .catch(err =>
         dispatch({
           type: ADD_DEFECT,
-          payload: {msg:'err',data:null}
+          payload: {msg:'Error to add a defect',data:null}
         })
       );
   }; 
