@@ -36,7 +36,7 @@ export class EmplyeeAllocation extends Component {
             {
                 title: 'Roll As',
                 dataIndex: 'roll-as',
-                render: (text, record) =>
+                render: () =>
                     this.state.dataSource.length >= 1 ? (
                         <Select
                             showSearch
@@ -102,6 +102,7 @@ export class EmplyeeAllocation extends Component {
                 })
                 
             }
+            alert(project)
             alert(this.state.employee)
             this.setState({
                 dataSource:[],
@@ -142,11 +143,11 @@ export class EmplyeeAllocation extends Component {
                                 option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                             }
                         >
-                            <Option value="01">Project-01</Option>
-                            <Option value="02">Project-02</Option>
-                            <Option value="03">Project-03</Option>
-                            <Option value="04">Project-04</Option>
-                            <Option value="05">Project-05</Option>
+                            <Option value="Project-01">Project-01</Option>
+                            <Option value="Project-02">Project-02</Option>
+                            <Option value="Project-03">Project-03</Option>
+                            <Option value="Project-04">Project-04</Option>
+                            <Option value="Project-05">Project-05</Option>
                         </Select>,
                 </Form.Item>
                     <Form.Item

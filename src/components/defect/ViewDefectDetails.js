@@ -8,6 +8,7 @@ import "antd/dist/antd.css";
 import { Drawer, Form, Col, Row, Select, DatePicker } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import axios from "axios";
+import AddDefectDetailsForm from './AddDefectDetailsForm'
 
 const { Option } = Select;
 
@@ -19,6 +20,7 @@ export class ViewDefectDetails extends Component {
       searchedColumn: "",
       visible: false,
       data: [],
+      show:false
     };
   }
 
@@ -43,7 +45,13 @@ export class ViewDefectDetails extends Component {
 
   showDrawer = () => {
     this.setState({
-      visible: true,
+      visible: true,    
+    });
+  };
+
+  showDrawerDefectform = () => {
+    this.setState({      
+      show: true
     });
   };
 
@@ -191,16 +199,17 @@ export class ViewDefectDetails extends Component {
     return (
       <Fragment>
         <div>
-          <Link to="/add-defect">
+          
             <Button
               type="primary"
               style={{
                 marginBottom: 16,
               }}
+              onClick={(this.showDrawerDefectform)}
             >
               Add New Defect
             </Button>
-          </Link>
+          
           <Table columns={columns} dataSource={this.state.data} />
         </div>
 
@@ -409,6 +418,7 @@ export class ViewDefectDetails extends Component {
             </Row>
           </Form>
         </Drawer>
+        <AddDefectDetailsForm show={this.state.show}/>
         {/*  */}
       </Fragment>
     );
