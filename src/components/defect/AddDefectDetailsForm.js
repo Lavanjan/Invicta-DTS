@@ -92,12 +92,16 @@ export class AddDefectDetailsForm extends Component {
                 foundIn: this.state.foundIn,                
             }
         })
+        
 
         this.props.adddefect(this.state.defects)
         this.formRef.current.resetFields();
         // window.location.reload();
 
     }
+    // onClick=()=>{
+    //     console.log(this.props.data.length)
+    // }
 
 
     render() {
@@ -326,6 +330,7 @@ export class AddDefectDetailsForm extends Component {
                                 <Button type="primary" htmlType="submit" style={{ width: 100 }}>
                                     <PlusCircleOutlined />  Submit
                                  </Button>
+                                 {/* <Button onClick={this.onClick}>alert</Button> */}
                             </Form.Item>
 
                         </Row>

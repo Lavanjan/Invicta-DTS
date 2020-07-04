@@ -6,7 +6,7 @@ import { SearchOutlined, SyncOutlined } from "@ant-design/icons";
 import "antd/dist/antd.css";
 import { Drawer, Form, Col, Row, Select, Typography } from "antd";
 import axios from "axios";
-import AddDefectDetailsForm from './AddDefectDetailsForm'
+import AddDefectDetailsForm from "./AddDefectDetailsForm";
 
 const { Text } = Typography;
 const { Option } = Select;
@@ -32,8 +32,12 @@ export class ViewDefectDetails extends Component {
       visible: false,
       data: [],
       loading: false,
-      show:false
+      show: false,
     };
+  }
+
+  componentWillMount() {
+    // console.log(this.state.data[0]);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -52,7 +56,7 @@ export class ViewDefectDetails extends Component {
     //   foundIn,
     //   availableIn,
     // } = nextProps.defects_task;
-    
+
     // this.setState({
     //   defectsId,
     //   defectsName,
@@ -108,15 +112,29 @@ export class ViewDefectDetails extends Component {
 
   showDrawer = () => {
     this.setState({
-      visible: true,    
+      visible: true,
     });
   };
 
+  onClick = () => {
+    for(let i = 0; i < this.state.data.length; i++){
+      const severityTotal = this.state.data[i].severity;
+      console.log(severityTotal);
+      let totalHigh;
+      
+    }
+    
+  }
+
   showDrawerDefectform = () => {
-    this.setState({      
-      show: true
+    this.setState({
+      show: true,
     });
   };
+
+  getSeverityBreakdown = () => {
+    // console.log(this.state.data);
+  }
 
   onClose = () => {
     this.setState({
@@ -341,17 +359,24 @@ export class ViewDefectDetails extends Component {
               style={{
                 marginBottom: 16,
               }}
-              onClick={(this.showDrawerDefectform)}
+              onClick={this.showDrawerDefectform}
             >
               Add New Defect
             </Button>
+            <Button onClick = {this.onClick}>Push</Button>
+            <Text strong style={{ marginLeft: "300px" }}>
+              Severity Breakdown
+            </Text>
+            &nbsp;&nbsp;&nbsp;
+            <Text strong style={{}}>
+              High: 10
+            </Text>
           </Link>
-          <Text style={{ marginLeft: "940px" }} mark>
-            Total Defects: 20
+          <Text style={{ marginLeft: "450px" }} mark>
+            Total Defects: {this.state.data.length}
           </Text>
           <Table columns={columns} dataSource={this.state.data} />
         </div>
-        
 
         <Drawer
           title="Update Defect Details"
@@ -429,7 +454,7 @@ export class ViewDefectDetails extends Component {
                   rules={[{ required: true, message: "Please select an Type" }]}
                 >
                   <Select placeholder="Please select an Type" name="type">
-                    <Option value="Front-End">Fontend</Option>  
+                    <Option value="Front-End">Fontend</Option>
                     <Option value="Back-End">Backend</Option>
                   </Select>
                 </Form.Item>
@@ -576,7 +601,7 @@ export class ViewDefectDetails extends Component {
             </Row>
           </Form>
         </Drawer>
-        <AddDefectDetailsForm show={this.state.show}/>
+        <AddDefectDetailsForm show={this.state.show} data={this.state.data} />
         {/*  */}
       </Fragment>
     );

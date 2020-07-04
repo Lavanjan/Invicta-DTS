@@ -3,7 +3,14 @@ import { Layout, Menu, Breadcrumb, Dropdown, Col } from "antd";
 import "antd/dist/antd.css";
 import "./../index.css";
 import { Switch, Link } from "react-router-dom";
-import { SettingOutlined, DownOutlined, UserOutlined, UserAddOutlined, AppstoreAddOutlined, UserSwitchOutlined } from "@ant-design/icons";
+import {
+  SettingOutlined,
+  DownOutlined,
+  UserOutlined,
+  UserAddOutlined,
+  AppstoreAddOutlined,
+  HomeOutlined,
+} from "@ant-design/icons";
 
 import Body from "./../components/body/body";
 
@@ -12,24 +19,20 @@ const menu = (
   <Menu>
     <Menu.Item>
       <a target="_blank" rel="noopener noreferrer" href="#">
-      <UserOutlined />&nbsp;&nbsp;My Profile
+        <UserOutlined />
+        &nbsp;&nbsp;My Profile
       </a>
     </Menu.Item>
     <Menu.Item>
-      <a
-        rel="noopener noreferrer"
-        href="/manage-project"
-      >
-        <AppstoreAddOutlined />&nbsp;&nbsp;Manage Project
+      <a rel="noopener noreferrer" href="/manage-project">
+        <AppstoreAddOutlined />
+        &nbsp;&nbsp;Manage Project
       </a>
     </Menu.Item>
     <Menu.Item>
-      <a
-        href="/employee"
-        rel="noopener noreferrer"
-        
-      >
-        <UserAddOutlined />&nbsp;&nbsp;Manage Employee
+      <a href="/employee" rel="noopener noreferrer">
+        <UserAddOutlined />
+        &nbsp;&nbsp;Manage Employee
       </a>
     </Menu.Item>
     {/* <Menu.Item>
@@ -56,8 +59,8 @@ export class Layouts extends Component {
       <div>
         <Layout className="layout">
           <Header>
-            <Link to = "/">
-            <div className="logo" />
+            <Link to="/">
+              <div className="logo" />
             </Link>
             <div className="sub">
               <Dropdown overlay={menu}>
@@ -65,23 +68,29 @@ export class Layouts extends Component {
                   className="ant-dropdown-link"
                   onClick={(e) => e.preventDefault()}
                 >
-                  <SettingOutlined />&nbsp;Configuration <DownOutlined />
+                  <SettingOutlined />
+                  &nbsp;Configuration <DownOutlined />
                 </a>
               </Dropdown>
-              
             </div>
           </Header>
           <Content style={{ padding: "0 50px" }}>
-            <Breadcrumb style={{ margin: "16px 0" }}>
-              <Breadcrumb.Item>Invicta Defect Tracker System</Breadcrumb.Item>
-            </Breadcrumb>
+            <Link to="/">
+              <Breadcrumb style={{ margin: "16px 0" }}>
+                <HomeOutlined style={{ fontSize: "20px" }} />
+                &nbsp;&nbsp;&nbsp;
+                <Breadcrumb.Item>Invicta Defect Tracker System</Breadcrumb.Item>
+              </Breadcrumb>
+            </Link>
             <div className="site-layout-content">
               <Switch>
                 <Body />
               </Switch>
             </div>
           </Content>
-          <Footer style={{ textAlign: "center" }}>Invicta Defect Tracker System ©2018</Footer>
+          <Footer style={{ textAlign: "center" }}>
+            Invicta Defect Tracker System ©2018
+          </Footer>
         </Layout>
       </div>
     );
