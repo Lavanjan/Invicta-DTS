@@ -6,6 +6,7 @@ import { SearchOutlined, SyncOutlined } from "@ant-design/icons";
 import "antd/dist/antd.css";
 import { Drawer, Form, Col, Row, Select, Typography } from "antd";
 import axios from "axios";
+import AddDefectDetailsForm from './AddDefectDetailsForm'
 
 const { Text } = Typography;
 const { Option } = Select;
@@ -30,8 +31,8 @@ export class ViewDefectDetails extends Component {
       searchedColumn: "",
       visible: false,
       data: [],
-
       loading: false,
+      show:false
     };
   }
 
@@ -106,7 +107,13 @@ export class ViewDefectDetails extends Component {
 
   showDrawer = () => {
     this.setState({
-      visible: true,
+      visible: true,    
+    });
+  };
+
+  showDrawerDefectform = () => {
+    this.setState({      
+      show: true
     });
   };
 
@@ -327,12 +334,13 @@ export class ViewDefectDetails extends Component {
     return (
       <Fragment>
         <div>
-          <Link to="/add-defect">
+          <Link>
             <Button
               type="primary"
               style={{
                 marginBottom: 16,
               }}
+              onClick={(this.showDrawerDefectform)}
             >
               Add New Defect
             </Button>
@@ -342,7 +350,8 @@ export class ViewDefectDetails extends Component {
           </Text>
           <Table columns={columns} dataSource={this.state.data} />
         </div>
-        {/*  */}
+        </Fragment>
+
         <Drawer
           title="Update Defect Details"
           width={720}
@@ -566,6 +575,7 @@ export class ViewDefectDetails extends Component {
             </Row>
           </Form>
         </Drawer>
+        <AddDefectDetailsForm show={this.state.show}/>
         {/*  */}
       </Fragment>
     );
