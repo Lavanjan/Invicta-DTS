@@ -1,11 +1,12 @@
 import React, { Component } from 'react'
-import { Drawer, Form, Col, Row, Select, Tag, Input, Button, } from "antd";
+import { Drawer, Form, Col, Row, Select, Tag, Input, Button,Typography } from "antd";
 import { PlusCircleOutlined, ClearOutlined } from '@ant-design/icons';
 import { connect } from 'react-redux';
 import { message } from 'antd';
 import { adddefect } from '../redux/action/ActionDefect';
 const { Option } = Select;
 const { TextArea } = Input;
+const { Text} = Typography;
 export class AddDefectDetailsForm extends Component {
     formRef = React.createRef();
 
@@ -26,26 +27,27 @@ export class AddDefectDetailsForm extends Component {
     state = {
         show: false,
         defects: {},
-        err: 'err',
-        defectId: 'DF001',
+        err: 'err',        
+        count: 1,
         defect: '',
         stepToRecreate: '',
         type: '',
-        status: 'new',
+        status: 'New',
         severity: '',
         priority: '',
         enteredBy: '',
         assignTo: '',
-        foundIn: '',        
+        foundIn: '',
         module: '',
-        subModule: ''
+        subModule: '',
+        availableIn: 'Rl-1'
     }
 
     onClose = () => {
         this.setState({
             show: false
         })
-        window.location.reload(); 
+        window.location.reload();
     };
 
     handleChange = (event) => {
@@ -75,12 +77,23 @@ export class AddDefectDetailsForm extends Component {
     };
     handleFoundInChange = value => {
         this.setState({ foundIn: value });
-    };   
+    };
+    handlemoduleChange = value => {
+        this.setState({
+            module: value
+        })
+    }
+    handleSubModuleChange = value => {
+        this.setState({
+            subModule: value
+        })
+    }
 
     handleSubmit = (event) => {
+        const Id =(this.props.data.length + this.state.count)
         this.setState({
             defects: {
-                defectsId: this.state.defectId,
+                defectsId: Id,
                 defectsName: this.state.defect,
                 stepToRecreate: this.state.stepToRecreate,
                 type: this.state.type,
@@ -89,14 +102,21 @@ export class AddDefectDetailsForm extends Component {
                 priority: this.state.priority,
                 enteredBy: this.state.enteredBy,
                 assignTo: this.state.assignTo,
-                foundIn: this.state.foundIn,                
+                foundIn: this.state.foundIn,
+                module: this.state.module,
+                subModule: this.state.subModule,
+                availableIn: this.state.availableIn
             }
         })
+<<<<<<< HEAD
         
 
+=======
+        console.log(this.state.defects)
+>>>>>>> 293bf55b032137cb3d2444b858d008c19b4ce0be
         this.props.adddefect(this.state.defects)
         this.formRef.current.resetFields();
-        // window.location.reload();
+        window.location.reload();
 
     }
     // onClick=()=>{
@@ -120,14 +140,14 @@ export class AddDefectDetailsForm extends Component {
 
                             <Col span={12}>
                                 <Form.Item>
-                                    <Tag  style={{ fontSize: 15, color:"black"}}>Defect ID :</Tag>
-                                    <Tag color="#2db7f5" name="defectId" style={{ fontSize: 15 }}>DF001</Tag>
+                                    <Text style={{ fontSize: 15, color: "black"}}>Defect ID : </Text>
+                                    <Tag color="#2db7f5" name="defectId" style={{ fontSize: 15,color: "black" }}>{this.props.data.length + this.state.count}</Tag>
                                 </Form.Item>
                             </Col>
                             <Col span={12}>
                                 <Form.Item>
-                                <Tag  style={{ fontSize: 15, color:"black" ,marginLeft:188}}>Status :</Tag>
-                                    <Tag color="#87d068" name="status" style={{ fontSize: 15 }}>NEW</Tag>
+                                    <Text style={{ fontSize: 15, color: "black", marginLeft: 210 }}>Status : </Text>                                    
+                                    <Tag color="#2db7f5" name="status" style={{ fontSize: 15,color: "black" }}>NEW</Tag>
                                 </Form.Item>
                             </Col>
 
