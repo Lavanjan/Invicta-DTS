@@ -22,7 +22,7 @@ export class ViewEmployee extends Component {
       data: [],
       show:false
     };
-  }
+  }  
   getColumnSearchProps = (dataIndex) => ({
     filterDropdown: ({
       setSelectedKeys,

@@ -26,6 +26,9 @@ export class ViewDefectDetails extends Component {
       enteredBy: "",
       foundIn: "",
       availableIn: "",
+      high:"High",
+      medium:"Medium",
+      low:"low",
 
       searchText: "",
       searchedColumn: "",
@@ -268,8 +271,20 @@ export class ViewDefectDetails extends Component {
         ],
         filterMultiple: false,
         onFilter: (value, record) => record.status.indexOf(value) === 0,
+        render:(value,record)=> {
+          switch (record.status) {
+              case "New": return <Tag color="geekblue">New</Tag>;
+              case "Open": return <Tag color="orange">Medium</Tag>;
+              case "Fixed": return <Tag color="green">Fixed</Tag>;
+              case "Closed": return <Tag color="lime">Closed</Tag>;
+              case "Re-open": return <Tag color="purple">Re-open</Tag>;
+              case "Postpone": return <Tag color="cyan">Postpone</Tag>;
 
-        // ...this.getColumnSearchProps("status"),
+          }
+      }  
+        
+
+        
       },
       {
         title: "Severity",
@@ -291,6 +306,14 @@ export class ViewDefectDetails extends Component {
         ],
         filterMultiple: false,
         onFilter: (value, record) => record.severity.indexOf(value) === 0,
+        render:(value,record)=> {
+          switch (record.severity) {
+              case "High": return <Tag color="red">High</Tag>;
+              case "Medium": return <Tag color="orange">Medium</Tag>;
+              case "Low": return <Tag color="green">Low</Tag>;
+
+          }
+      }       
       },
       {
         title: "Priority",
@@ -312,6 +335,14 @@ export class ViewDefectDetails extends Component {
         ],
         filterMultiple: false,
         onFilter: (value, record) => record.priority.indexOf(value) === 0,
+        render:(value,record)=> {
+          switch (record.priority) {
+              case "High": return <Tag color="red">High</Tag>;
+              case "Medium": return <Tag color="orange">Medium</Tag>;
+              case "Low": return <Tag color="green">Low</Tag>;
+
+          }
+      } 
       },
       {
         title: "EnteredBy",
@@ -576,7 +607,7 @@ export class ViewDefectDetails extends Component {
             </Row>
           </Form>
         </Drawer>
-        <AddDefectDetailsForm show={this.state.show}/>
+        <AddDefectDetailsForm show={this.state.show} data={this.state.data}/>
         {/*  */}
       </Fragment>
     );
