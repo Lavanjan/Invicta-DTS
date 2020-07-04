@@ -4,6 +4,8 @@ import ViewDefectDetails from './../defect/ViewDefectDetails';
 import AddDefectDetailsForm from './../defect/AddDefectDetailsForm';
 import EmployeeAllocation from './../employeeAllocation/EmplyeeAllocation'
 import AddNewProjects from './../addNewProjects';
+import Employee from  './../employee/index'
+import AddEmployeeForm from './../employee/AddEmployeeForm'
 
 
 export class body extends Component {
@@ -15,6 +17,11 @@ export class body extends Component {
                 <Route path = "/add-defect" component = { AddDefectDetailsForm } />
                 <Route path = "/employee-allocation" component = { EmployeeAllocation } />                
                 <Route path="/add-projects" component={AddNewProjects} />
+                <Route path="/employee" component={Employee} />
+                <Route path="/add-employee" component={AddEmployeeForm} />
+                <Route path="/view-employee" component={ViewDefectDetails} />
+
+
             </div>
         )
     }

@@ -1,44 +1,44 @@
 import React, { Component } from 'react'
-import { Drawer, Form, Col, Row, Select } from "antd";
-import { Input, Button, Tag } from "antd";
+import { Drawer, Form, Col, Row, Select, Tag, Input, Button, } from "antd";
 import { PlusCircleOutlined, ClearOutlined } from '@ant-design/icons';
 import { connect } from 'react-redux';
 import { message } from 'antd';
-import {adddefect} from '../redux/action/ActionDefect';
+import { adddefect } from '../redux/action/ActionDefect';
 const { Option } = Select;
 const { TextArea } = Input;
 export class AddDefectDetailsForm extends Component {
     formRef = React.createRef();
-  
-      componentWillReceiveProps(nextProps) {
 
-          if (nextProps.msg) { 
+    componentWillReceiveProps(nextProps) {
+
+        if (nextProps.msg) {
             message.loading('Action in progress..')
-            .then(() => message.success(nextProps.msg))  
-            
-          }
-          else if(nextProps.show){
+                .then(() => message.success(nextProps.msg))
+
+        }
+        else if (nextProps.show) {
             this.setState({
-                    show:true
-            }) 
-          
-          }  
-        } 
+                show: true
+            })
+
+        }
+    }
     state = {
-        show:false,
-        defects:{},
-        err:'err',
+        show: false,
+        defects: {},
+        err: 'err',
         defectId: 'DF001',
         defect: '',
         stepToRecreate: '',
         type: '',
-        status: '',
+        status: 'new',
         severity: '',
         priority: '',
         enteredBy: '',
         assignTo: '',
-        foundIn: '',
-        availableIn: ''
+        foundIn: '',        
+        module: '',
+        subModule: ''
     }
 
     onClose = () => {
@@ -46,7 +46,7 @@ export class AddDefectDetailsForm extends Component {
             show: false
         })
         window.location.reload(); 
-    };  
+    };
 
     handleChange = (event) => {
         this.setState({
@@ -75,14 +75,11 @@ export class AddDefectDetailsForm extends Component {
     };
     handleFoundInChange = value => {
         this.setState({ foundIn: value });
-    };
-    handleAvailableInChange = value => {
-        this.setState({ availableIn: value });
-    };
+    };   
 
-    handleSubmit = (event) => {    
+    handleSubmit = (event) => {
         this.setState({
-            defects :{
+            defects: {
                 defectsId: this.state.defectId,
                 defectsName: this.state.defect,
                 stepToRecreate: this.state.stepToRecreate,
@@ -92,16 +89,16 @@ export class AddDefectDetailsForm extends Component {
                 priority: this.state.priority,
                 enteredBy: this.state.enteredBy,
                 assignTo: this.state.assignTo,
-                foundIn: this.state.foundIn,
-                availableIn: this.state.availableIn
-            } 
-        })    
-      
+                foundIn: this.state.foundIn,                
+            }
+        })
+
         this.props.adddefect(this.state.defects)
         this.formRef.current.resetFields();
-        window.location.reload();       
-       
+        // window.location.reload();
+
     }
+
 
     render() {
         return (
@@ -111,28 +108,32 @@ export class AddDefectDetailsForm extends Component {
                     width={720}
                     onClose={this.onClose}
                     visible={this.state.show}
-                    bodyStyle={{ paddingBottom: 80 }}
-                    placement='left'                   
+                    placement='left'
 
                 >
                     <Form layout="vertical" hideRequiredMark ref={this.formRef} name="add-defect" onFinish={this.handleSubmit}>
                         <Row gutter={16}>
-                            <Col span={24}>                                
-                                <Form.Item
-                                    label="Defect ID"
-                                    onChange={this.handleChange}
-                                    name="defectIdLabel"
-                                >
-                                    <Input placeholder="DF001" disabled name="defectId" />
+
+                            <Col span={12}>
+                                <Form.Item>
+                                    <Tag  style={{ fontSize: 15, color:"black"}}>Defect ID :</Tag>
+                                    <Tag color="#2db7f5" name="defectId" style={{ fontSize: 15 }}>DF001</Tag>
                                 </Form.Item>
                             </Col>
+                            <Col span={12}>
+                                <Form.Item>
+                                <Tag  style={{ fontSize: 15, color:"black" ,marginLeft:188}}>Status :</Tag>
+                                    <Tag color="#87d068" name="status" style={{ fontSize: 15 }}>NEW</Tag>
+                                </Form.Item>
+                            </Col>
+
                         </Row>
                         <Row gutter={16}>
                             <Col span={24}>
                                 <Form.Item
                                     label="Defect"
                                     onChange={this.handleChange}
-                                    name="defectLabel"
+                                    name="Defect"
                                     rules={[
                                         {
                                             required: true,
@@ -146,7 +147,7 @@ export class AddDefectDetailsForm extends Component {
                         <Row gutter={16}>
                             <Col span={24}>
                                 <Form.Item
-                                    name="stepToRecreateLabel"
+                                    name="Step To Recreate"
                                     label="Step to Recreate"
                                     onChange={this.handleChange}
                                     rules={[
@@ -166,38 +167,40 @@ export class AddDefectDetailsForm extends Component {
                         <Row gutter={16}>
                             <Col span={12}>
                                 <Form.Item
-                                    label="Type"
-                                    name="typeLabel"
+                                    label="Module"
+                                    name="Module"
                                     rules={[
                                         {
                                             required: true,
                                         },
                                     ]}
                                 >
-                                    <Select value={this.state.type}   name="type" onChange={this.handleTypeChange}>
-                                        <Option value="Front End">Front End</Option>
-                                        <Option value="Back End">Back End</Option>
-                                        <Option value="UI">UI</Option>
+                                    <Select value={this.state.module} defaultValue="Select Module" name="module" onChange={this.handlemoduleChange}>
+                                        <Option value="Module - 1">Module - 1</Option>
+                                        <Option value="Module - 2">Module - 2</Option>
+                                        <Option value="Module - 3">Module - 3</Option>
                                     </Select>
                                 </Form.Item>
                             </Col>
                             <Col span={12}>
                                 <Form.Item
-                                    label="Status"
-                                    name="statusLabel"
+                                    label="Sub Module"
+                                    name="SubModule"
                                     rules={[
                                         {
                                             required: true,
                                         },
                                     ]}
                                 >
-                                    <Select value={this.state.status}   name="status" onChange={this.handleStatusChange}>
-                                        <Option value="New">New</Option>
-                                        <Option value="Open">Open</Option>
-                                        <Option value="Fixed">Fixed</Option>
-                                        <Option value="Closed">Closed</Option>
-                                        <Option value="Re-open">Re-open</Option>
-                                        <Option value="Postpone">Postpone</Option>
+
+                                    <Select value={this.state.subModule} defaultValue="Select Sub Module" name="subModule" onChange={this.handleSubModuleChange}>
+                                        <Option value="Sub Module - 1">Sub Module - 1</Option>
+                                        <Option value="Sub Module - 2">Sub Module - 2</Option>
+                                        <Option value="Sub Module - 3">Sub Module - 3</Option>
+                                        <Option value="Sub Module - 4">Sub Module - 4</Option>
+                                        <Option value="Sub Module - 5">Sub Module - 5</Option>
+                                        <Option value="Sub Module - 6">Sub Module - 6</Option>
+
                                     </Select>
                                 </Form.Item>
                             </Col>
@@ -205,14 +208,51 @@ export class AddDefectDetailsForm extends Component {
                         <Row gutter={16}>
                             <Col span={12}>
                                 <Form.Item
+                                    label="Type"
+                                    name="Type"
+                                    rules={[
+                                        {
+                                            required: true,
+                                        },
+                                    ]}
+                                >
+                                    <Select value={this.state.type} defaultValue="Select Type" name="type" onChange={this.handleTypeChange}>
+                                        <Option value="Front End">Front End</Option>
+                                        <Option value="Back End">Back End</Option>
+                                        <Option value="UI">UI</Option>
+                                    </Select>
+                                </Form.Item>
+                            </Col> <Col span={12}>
+                                <Form.Item
+                                    label="Found In"
+                                    name="Found In"
+                                    rules={[
+                                        {
+                                            required: true,
+                                        },
+                                    ]}
+                                >
+                                    <Select value={this.state.foundIn} name="foundIn" defaultValue="Select Found In" onChange={this.handleFoundInChange}>
+                                        <Option value="Rel-1">Rel-1</Option>
+                                        <Option value="Rel-2">Rel-2</Option>
+                                        <Option value="Rel-3">Rel-3</Option>
+                                        <Option value="Rel-4">Rel-4</Option>
+                                    </Select>
+                                </Form.Item>
+                            </Col>
+
+                        </Row>
+                        <Row gutter={16}>
+                            <Col span={12}>
+                                <Form.Item
                                     label="Serverity"
-                                    name="severityLabel"
+                                    name="Severity"
                                     rules={[
                                         {
                                             required: true,
                                         },
                                     ]}                                >
-                                    <Select value={this.state.severity}  name="severity" onChange={this.handleSeverityChange}>
+                                    <Select value={this.state.severity} defaultValue="Select Severity" name="severity" onChange={this.handleSeverityChange}>
                                         <Option value="High">High</Option>
                                         <Option value="Medium">Medium</Option>
                                         <Option value="Low">Low</Option>
@@ -222,14 +262,14 @@ export class AddDefectDetailsForm extends Component {
                             <Col span={12}>
                                 <Form.Item
                                     label="Priority"
-                                    name="priorityLabel"
+                                    name="Priority"
                                     rules={[
                                         {
                                             required: true,
                                         },
                                     ]}
                                 >
-                                    <Select value={this.state.priority} name="priority" onChange={this.handlePriorityChange}>
+                                    <Select value={this.state.priority} name="priority" defaultValue="Select Priorty" onChange={this.handlePriorityChange}>
                                         <Option value="High">High</Option>
                                         <Option value="Medium">Medium</Option>
                                         <Option value="Low">Low</Option>
@@ -248,7 +288,7 @@ export class AddDefectDetailsForm extends Component {
                                         },
                                     ]}
                                 >
-                                    <Select value={this.state.enteredBy}   name="enteredBy" onChange={this.handleEnteredByChange}>
+                                    <Select value={this.state.enteredBy} defaultValue="Select Entered By" name="enteredBy" onChange={this.handleEnteredByChange}>
                                         <Option value="Sanjsijan">Sanjsijan</Option>
                                         <Option value="Lavanjan">Lavanjan</Option>
                                         <Option value="Sivapiriyan">Sivapiriyan</Option>
@@ -266,7 +306,7 @@ export class AddDefectDetailsForm extends Component {
                                         },
                                     ]}
                                 >
-                                    <Select value={this.state.assignTo}   name="assignTo" onChange={this.handleAssignToChange}>
+                                    <Select value={this.state.assignTo} defaultValue="Select Assign To" name="assignTo" onChange={this.handleAssignToChange}>
                                         <Option value="Sanjsijan">Sanjsijan</Option>
                                         <Option value="Lavanjan">Lavanjan</Option>
                                         <Option value="Sivapiriyan">Sivapiriyan</Option>
@@ -276,56 +316,18 @@ export class AddDefectDetailsForm extends Component {
                             </Col>
                         </Row>
                         <Row gutter={16}>
-                            <Col span={12}>
-                                <Form.Item
-                                    label="Found In"
-                                    name="foundInLabel"
-                                    rules={[
-                                        {
-                                            required: true,
-                                        },
-                                    ]}
-                                >
-                                    <Select value={this.state.foundIn}   name="foundIn" onChange={this.handleFoundInChange}>
-                                        <Option value="Rel-1">Rel-1</Option>
-                                        <Option value="Rel-2">Rel-2</Option>
-                                        <Option value="Rel-3">Rel-3</Option>
-                                        <Option value="Rel-4">Rel-4</Option>
-                                    </Select>
-                                </Form.Item>
-                            </Col>
-                            <Col span={12}>
-                                <Form.Item
-                                    label="Aailable In"
-                                    name="availableInLabel"
-                                    rules={[
-                                        {
-                                            required: true,
-                                        },
-                                    ]}
-                                >
-                                    <Select value={this.state.availableIn}   name="availableIn" onChange={this.handleAvailableInChange}>
-                                        <Option value="Rel-1">Rel-1</Option>
-                                        <Option value="Rel-2">Rel-2</Option>
-                                        <Option value="Rel-3">Rel-3</Option>
-                                        <Option value="Rel-4">Rel-4</Option>
-                                    </Select>
-                                </Form.Item>
-                            </Col>
-                        </Row> 
-                        <Row gutter={16}>
-                                               
-                        <Form.Item>
-                            <Button type="danger" style={{ width: 100 ,marginLeft:453}}>
-                                <ClearOutlined />
-                                Clear
-                        </Button>
-                            &nbsp;
-                        <Button type="primary" htmlType="submit" style={{ width: 100 }}>
-                                <PlusCircleOutlined />  Submit
-                        </Button>
-                        </Form.Item>
-                        
+
+                            <Form.Item>
+                                <Button type="danger" onClick={this.clearClick} style={{ width: 100, marginTop: 30, marginLeft: 460 }}>
+                                    <ClearOutlined />
+                                    Clear
+                                 </Button>
+                                &nbsp;
+                                <Button type="primary" htmlType="submit" style={{ width: 100 }}>
+                                    <PlusCircleOutlined />  Submit
+                                 </Button>
+                            </Form.Item>
+
                         </Row>
                     </Form>
                 </Drawer>
@@ -335,13 +337,13 @@ export class AddDefectDetailsForm extends Component {
 }
 const mapStateToProps = state => ({
     defect: state.ReducerDefect.defect,
-    msg:state.ReducerDefect.msg
-  });
-  
-  const mapDispatchToProps = (dispatch, ownProps) => {
+    msg: state.ReducerDefect.msg
+});
+
+const mapDispatchToProps = (dispatch, ownProps) => {
     return {
-        adddefect:(defect) => { dispatch(adddefect(defect)) },
-        
+        adddefect: (defect) => { dispatch(adddefect(defect)) },
+
     }
-  }
-export default connect(mapStateToProps,mapDispatchToProps) (AddDefectDetailsForm)
+}
+export default connect(mapStateToProps, mapDispatchToProps)(AddDefectDetailsForm)

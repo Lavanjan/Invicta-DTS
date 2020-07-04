@@ -25,9 +25,9 @@ const menu = (
     </Menu.Item>
     <Menu.Item>
       <a
-        target="_blank"
+        href="/employee"
         rel="noopener noreferrer"
-        href="#"
+        
       >
         <UserAddOutlined />&nbsp;&nbsp;Add New Employee
       </a>
