@@ -19,6 +19,8 @@ router.route('/add').post((req, res) => {
   const assignTo = req.body.assignTo;
   const foundIn = req.body.foundIn;
   const availableIn = req.body.availableIn;
+  const module = req.body.module;
+  const subModule = req.body.subModule;
 
   const newDefects = new defects({
     defectsId,
@@ -32,6 +34,8 @@ router.route('/add').post((req, res) => {
     assignTo,
     foundIn,
     availableIn,
+    module,
+    subModule
   });
   newDefects
     .save()
@@ -65,6 +69,8 @@ router.route('/update/:id').put((req, res) => {
         defects.assignTo = req.body.assignTo;
         defects.foundIn = req.body.foundIn;
         defects.availableIn = req.body.availableIn;
+        defects.module = req.body.module;
+        defects.subModule = req.body.subModule;
 
         defects.save()
         .then(()=> res.json('Defects Updated'))

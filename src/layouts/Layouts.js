@@ -12,15 +12,15 @@ const menu = (
   <Menu>
     <Menu.Item>
       <a target="_blank" rel="noopener noreferrer" href="#">
-      <UserOutlined />&nbsp;&nbsp;Profile
+      <UserOutlined />&nbsp;&nbsp;My Profile
       </a>
     </Menu.Item>
     <Menu.Item>
       <a
         rel="noopener noreferrer"
-        href="/add-projects"
+        href="/manage-project"
       >
-        <AppstoreAddOutlined />&nbsp;&nbsp;Add New Project
+        <AppstoreAddOutlined />&nbsp;&nbsp;Manage Project
       </a>
     </Menu.Item>
     <Menu.Item>
@@ -29,14 +29,14 @@ const menu = (
         rel="noopener noreferrer"
         href="#"
       >
-        <UserAddOutlined />&nbsp;&nbsp;Add New Employee
+        <UserAddOutlined />&nbsp;&nbsp;Manage Employee
       </a>
     </Menu.Item>
-    <Menu.Item>
+    {/* <Menu.Item>
       <a rel="noopener noreferrer" href="/employee-allocation">
       <UserSwitchOutlined />&nbsp;&nbsp;Employee Allocation
       </a>
-    </Menu.Item>
+    </Menu.Item> */}
   </Menu>
 );
 
@@ -81,7 +81,7 @@ export class Layouts extends Component {
               </Switch>
             </div>
           </Content>
-          <Footer style={{ textAlign: "center" }}>Invicta DTS ©2018</Footer>
+          <Footer style={{ textAlign: "center" }}>Invicta Defect Tracker System ©2018</Footer>
         </Layout>
       </div>
     );

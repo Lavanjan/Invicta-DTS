@@ -13,7 +13,9 @@ const defectsSchema = new Schema({
     enteredBy: { type: String, required:true },
     assignTo: { type: String, required: true },
     foundIn: { type: String, required: true },
-    availableIn: { type: String, required:true }
+    availableIn: { type: String, required:true },
+    module: { type: String, required: true },
+    subModule: { type: String, required: true }
 },{
     timestamps:true,
 });

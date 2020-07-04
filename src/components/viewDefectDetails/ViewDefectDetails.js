@@ -1,27 +1,90 @@
 import React, { Component, Fragment } from "react";
-import ReactDOM from "react-dom";
 import { Link } from "react-router-dom";
 import { Table, Input, Button, Space, Tag } from "antd";
 import Highlighter from "react-highlight-words";
-import { SearchOutlined } from "@ant-design/icons";
+import { SearchOutlined, SyncOutlined } from "@ant-design/icons";
 import "antd/dist/antd.css";
-import { Drawer, Form, Col, Row, Select, DatePicker } from "antd";
-import { PlusOutlined } from "@ant-design/icons";
+import { Drawer, Form, Col, Row, Select, Typography } from "antd";
 import axios from "axios";
 
+const { Text } = Typography;
 const { Option } = Select;
 
 export class ViewDefectDetails extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      id: "",
+      defectsId: "",
+      defectsName: "",
+      stepsToRecreate: "",
+      type: "",
+      status: "",
+      severity: "",
+      priority: "",
+      enteredBy: "",
+      foundIn: "",
+      availableIn: "",
+
       searchText: "",
       searchedColumn: "",
       visible: false,
       data: [],
+
+      loading: false,
     };
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.errors) {
+      this.setState({ errors: nextProps.errors });
+    }
+    const {
+      defectsId,
+      defectsName,
+      stepsToRecreate,
+      type,
+      status,
+      severity,
+      priority,
+      enteredBy,
+      foundIn,
+      availableIn,
+    } = nextProps.defects_task;
+    this.setState({
+      defectsId,
+      defectsName,
+      stepsToRecreate,
+      type,
+      status,
+      severity,
+      priority,
+      enteredBy,
+      foundIn,
+      availableIn,
+    });
+  }
+
+  componentDidMount() {
+    const { dt_id } = this.props.match.params;
+    this.props.getDefectDetails(dt_id);
+  }
+
+  onSubmit(e) {
+    e.preventDefault();
+    const updateDefects = {
+      defectId: this.state.defectsId,
+      defectsName: this.state.defectsName,
+      stepsToRecreate: this.state.stepsToRecreate,
+      type: this.state.type,
+      status: this.state.status,
+      severity: this.state.severity,
+      priority: this.state.priority,
+      enteredBy: this.state.enteredBy,
+      foundIn: this.state.foundIn,
+      availableIn: this.state.availableIn,
+    };
+  }
   create = (data) => {
     axios.post("http://localhost:5000/defects", data).then((res) => {
       console.log(res);
@@ -137,6 +200,9 @@ export class ViewDefectDetails extends Component {
         title: "DefectID",
         dataIndex: "defectsId",
         key: "defectsId",
+        sorter: (a, b) => a.defectsId - b.defectsId,
+        defaultSortOrder: "descend",
+        sortDirections: ["descend", "ascend"],
         ...this.getColumnSearchProps("defectId"),
       },
       {
@@ -149,25 +215,95 @@ export class ViewDefectDetails extends Component {
         title: "Type",
         dataIndex: "type",
         key: "type",
-        ...this.getColumnSearchProps("type"),
+        filters: [
+          {
+            text: "Front End",
+            value: "Front End",
+          },
+          {
+            text: "Back End",
+            value: "Back End",
+          },
+        ],
+        filterMultiple: false,
+        onFilter: (value, record) => record.type.indexOf(value) === 0,
       },
       {
         title: "Status",
         dataIndex: "status",
         key: "status",
-        ...this.getColumnSearchProps("status"),
+        filters: [
+          {
+            text: "New",
+            value: "New",
+          },
+          {
+            text: "Open",
+            value: "Open",
+          },
+          {
+            text: "Fixed",
+            value: "Fixed",
+          },
+          {
+            text: "Closed",
+            value: "Closed",
+          },
+          {
+            text: "Re-open",
+            value: "Re-open",
+          },
+          {
+            text: "Postpone",
+            value: "Postpone",
+          },
+        ],
+        filterMultiple: false,
+        onFilter: (value, record) => record.status.indexOf(value) === 0,
+
+        // ...this.getColumnSearchProps("status"),
       },
       {
         title: "Severity",
         dataIndex: "severity",
         key: "severity",
-        ...this.getColumnSearchProps("severity"),
+        filters: [
+          {
+            text: "High",
+            value: "High",
+          },
+          {
+            text: "Medium",
+            value: "Medium",
+          },
+          {
+            text: "Low",
+            value: "Low",
+          },
+        ],
+        filterMultiple: false,
+        onFilter: (value, record) => record.severity.indexOf(value) === 0,
       },
       {
         title: "Priority",
         dataIndex: "priority",
         key: "priority",
-        ...this.getColumnSearchProps("priority"),
+        filters: [
+          {
+            text: "High",
+            value: "High",
+          },
+          {
+            text: "Medium",
+            value: "Medium",
+          },
+          {
+            text: "Low",
+            value: "Low",
+          },
+        ],
+        filterMultiple: false,
+        onFilter: (value, record) => record.priority.indexOf(value) === 0,
       },
       {
         title: "EnteredBy",
@@ -182,10 +318,10 @@ export class ViewDefectDetails extends Component {
         ...this.getColumnSearchProps("assignTo"),
       },
       {
-        title: "Edit",
-        dataIndex: "edit",
-        key: "edit",
-        render: () => <a onClick={(this.showDrawer)}>Edit</a>,
+        title: "View",
+        dataIndex: "view",
+        key: "view",
+        render: () => <a onClick={this.showDrawer}>View</a>,
       },
     ];
     return (
@@ -201,9 +337,11 @@ export class ViewDefectDetails extends Component {
               Add New Defect
             </Button>
           </Link>
+          <Text style={{ marginLeft: "940px" }} mark>
+            Total Defects: 20
+          </Text>
           <Table columns={columns} dataSource={this.state.data} />
         </div>
-
         {/*  */}
         <Drawer
           title="Update Defect Details"
@@ -247,7 +385,7 @@ export class ViewDefectDetails extends Component {
                     },
                   ]}
                 >
-                  <Input placeholder="Defect" />
+                  <Input placeholder="Defect" name="defectsName" />
                 </Form.Item>
               </Col>
             </Row>
@@ -264,6 +402,7 @@ export class ViewDefectDetails extends Component {
                   ]}
                 >
                   <Input.TextArea
+                    name="stepsToRecreate"
                     rows={4}
                     placeholder="please enter the steps to recreate"
                   />
@@ -279,8 +418,8 @@ export class ViewDefectDetails extends Component {
                   onChange={this.handleChange}
                   rules={[{ required: true, message: "Please select an Type" }]}
                 >
-                  <Select placeholder="Please select an Type">
-                    <Option value="Front-End">Fontend</Option>
+                  <Select placeholder="Please select an Type" name="type">
+                    <Option value="Front-End">Fontend</Option>  
                     <Option value="Back-End">Backend</Option>
                   </Select>
                 </Form.Item>
@@ -293,7 +432,7 @@ export class ViewDefectDetails extends Component {
                     { required: true, message: "Please choose the status" },
                   ]}
                 >
-                  <Select placeholder="Please choose the status">
+                  <Select placeholder="Please choose the status" name="status">
                     <Option value="New">New</Option>
                     <Option value="Open">Open</Option>
                     <Option value="Fixed">Fixed</Option>
@@ -313,7 +452,10 @@ export class ViewDefectDetails extends Component {
                     { required: true, message: "Please choose the serverity" },
                   ]}
                 >
-                  <Select placeholder="Please choose the serverity">
+                  <Select
+                    placeholder="Please choose the serverity"
+                    name="serverity"
+                  >
                     <Option value="High">High</Option>
                     <Option value="Medium">Medium</Option>
                     <Option value="Low">Low</Option>
@@ -328,7 +470,10 @@ export class ViewDefectDetails extends Component {
                     { required: true, message: "Please choose the priority" },
                   ]}
                 >
-                  <Select placeholder="Please choose the priority">
+                  <Select
+                    placeholder="Please choose the priority"
+                    name="priority"
+                  >
                     <Option value="High">High</Option>
                     <Option value="Medium">Medium</Option>
                     <Option value="Low">Low</Option>
@@ -345,7 +490,10 @@ export class ViewDefectDetails extends Component {
                     { required: true, message: "Please choose the entered by" },
                   ]}
                 >
-                  <Select placeholder="Please choose the entered by">
+                  <Select
+                    placeholder="Please choose the entered by"
+                    name="enteredBy"
+                  >
                     <Option value="Sanjsijan">Sanjsijan</Option>
                     <Option value="Lavanjan">Lavanjan</Option>
                     <Option value="Sivapiriyan">Sivapiriyan</Option>
@@ -361,7 +509,10 @@ export class ViewDefectDetails extends Component {
                     { required: true, message: "Please choose the assign to" },
                   ]}
                 >
-                  <Select placeholder="Please choose the assign to">
+                  <Select
+                    placeholder="Please choose the assign to"
+                    name="assignTo"
+                  >
                     <Option value="Sanjsijan">Sanjsijan</Option>
                     <Option value="Lavanjan">Lavanjan</Option>
                     <Option value="Sivapiriyan">Sivapiriyan</Option>
@@ -379,7 +530,10 @@ export class ViewDefectDetails extends Component {
                     { required: true, message: "Please choose the found in" },
                   ]}
                 >
-                  <Select placeholder="Please choose the found in">
+                  <Select
+                    placeholder="Please choose the found in"
+                    name="foundIn"
+                  >
                     <Option value="Rel-1">Rel-1</Option>
                     <Option value="Rel-2">Rel-2</Option>
                     <Option value="Rel-3">Rel-3</Option>
@@ -398,7 +552,10 @@ export class ViewDefectDetails extends Component {
                     },
                   ]}
                 >
-                  <Select placeholder="Please choose the available in">
+                  <Select
+                    placeholder="Please choose the available in"
+                    name="availableIn"
+                  >
                     <Option value="Rel-1">Rel-1</Option>
                     <Option value="Rel-2">Rel-2</Option>
                     <Option value="Rel-3">Rel-3</Option>

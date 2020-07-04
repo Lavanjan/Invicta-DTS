@@ -135,7 +135,7 @@ export class AddNewProjects extends Component {
             </Button>
             &nbsp;
             <Button
-              type="submit"
+              type="primary"
               htmlType="submit"
               icon={<AppstoreAddOutlined />}
             >

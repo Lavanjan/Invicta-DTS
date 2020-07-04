@@ -31,7 +31,7 @@ const validateMessages = {
 export class AddDefectDetailsForm extends Component {
     formRef = React.createRef();
     state = {
-        defectId: 'DF001',
+        defectId: '00014',
         defect: '',
         stepToRecreate: '',
         type: '',
