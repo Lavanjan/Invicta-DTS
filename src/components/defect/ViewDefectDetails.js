@@ -40,30 +40,31 @@ export class ViewDefectDetails extends Component {
     if (nextProps.errors) {
       this.setState({ errors: nextProps.errors });
     }
-    const {
-      defectsId,
-      defectsName,
-      stepsToRecreate,
-      type,
-      status,
-      severity,
-      priority,
-      enteredBy,
-      foundIn,
-      availableIn,
-    } = nextProps.defects_task;
-    this.setState({
-      defectsId,
-      defectsName,
-      stepsToRecreate,
-      type,
-      status,
-      severity,
-      priority,
-      enteredBy,
-      foundIn,
-      availableIn,
-    });
+    // const {
+    //   defectsId,
+    //   defectsName,
+    //   stepsToRecreate,
+    //   type,
+    //   status,
+    //   severity,
+    //   priority,
+    //   enteredBy,
+    //   foundIn,
+    //   availableIn,
+    // } = nextProps.defects_task;
+    
+    // this.setState({
+    //   defectsId,
+    //   defectsName,
+    //   stepsToRecreate,
+    //   type,
+    //   status,
+    //   severity,
+    //   priority,
+    //   enteredBy,
+    //   foundIn,
+    //   availableIn,
+    // });
   }
 
   componentDidMount() {
@@ -350,7 +351,7 @@ export class ViewDefectDetails extends Component {
           </Text>
           <Table columns={columns} dataSource={this.state.data} />
         </div>
-        </Fragment>
+        
 
         <Drawer
           title="Update Defect Details"
