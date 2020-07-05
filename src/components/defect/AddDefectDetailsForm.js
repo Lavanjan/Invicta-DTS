@@ -108,12 +108,6 @@ export class AddDefectDetailsForm extends Component {
                 availableIn: this.state.availableIn
             }
         })
-<<<<<<< HEAD
-        
-
-=======
-        console.log(this.state.defects)
->>>>>>> 293bf55b032137cb3d2444b858d008c19b4ce0be
         this.props.adddefect(this.state.defects)
         this.formRef.current.resetFields();
         window.location.reload();

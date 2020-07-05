@@ -1,15 +1,23 @@
 import React, { Component, Fragment } from "react";
 import { Link } from "react-router-dom";
-import { Table, Input, Button, Space, Tag } from "antd";
+import { Table, Input, Button, Space, Tag, Badge } from "antd";
 import Highlighter from "react-highlight-words";
-import { SearchOutlined, SyncOutlined } from "@ant-design/icons";
+import {
+  SearchOutlined,
+  FallOutlined,
+  RiseOutlined,
+  StockOutlined,
+  BugOutlined,
+  RadarChartOutlined,
+} from "@ant-design/icons";
 import "antd/dist/antd.css";
-import { Drawer, Form, Col, Row, Select, Typography } from "antd";
+import { Drawer, Form, Col, Row, Select, Typography, Statistic } from "antd";
 import axios from "axios";
 import AddDefectDetailsForm from "./AddDefectDetailsForm";
 
 const { Text } = Typography;
 const { Option } = Select;
+const { TextArea } = Input;
 
 export class ViewDefectDetails extends Component {
   constructor(props) {
@@ -26,9 +34,16 @@ export class ViewDefectDetails extends Component {
       enteredBy: "",
       foundIn: "",
       availableIn: "",
-      high:"High",
-      medium:"Medium",
-      low:"low",
+      assignTo:"",
+      module:"",
+      subModule:"",
+      high: 0,
+      medium: 0,
+      low: 0,
+      newdef: 0,
+      severityTotal: [],
+      selectedRows: [],
+      selectedData: [],
 
       searchText: "",
       searchedColumn: "",
@@ -36,98 +51,474 @@ export class ViewDefectDetails extends Component {
       data: [],
       loading: false,
       show: false,
+      drawerData: {},
+      totalHigher: "",
     };
-  }
-
-  componentWillMount() {
-    // console.log(this.state.data[0]);
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.errors) {
       this.setState({ errors: nextProps.errors });
     }
-    // const {
-    //   defectsId,
-    //   defectsName,
-    //   stepsToRecreate,
-    //   type,
-    //   status,
-    //   severity,
-    //   priority,
-    //   enteredBy,
-    //   foundIn,
-    //   availableIn,
-    // } = nextProps.defects_task;
-
-    // this.setState({
-    //   defectsId,
-    //   defectsName,
-    //   stepsToRecreate,
-    //   type,
-    //   status,
-    //   severity,
-    //   priority,
-    //   enteredBy,
-    //   foundIn,
-    //   availableIn,
-    // });
   }
 
-  componentDidMount() {
-    const { dt_id } = this.props.match.params;
-    this.props.getDefectDetails(dt_id);
-  }
-
-  onSubmit(e) {
-    e.preventDefault();
-    const updateDefects = {
-      defectId: this.state.defectsId,
-      defectsName: this.state.defectsName,
-      stepsToRecreate: this.state.stepsToRecreate,
-      type: this.state.type,
-      status: this.state.status,
-      severity: this.state.severity,
-      priority: this.state.priority,
-      enteredBy: this.state.enteredBy,
-      foundIn: this.state.foundIn,
-      availableIn: this.state.availableIn,
-    };
-  }
-  create = (data) => {
-    axios.post("http://localhost:5000/defects", data).then((res) => {
-      console.log(res);
+  handleChange = (event, field) => {
+    console.log(event.target.name);
+    console.log(field);
+    this.setState({
+      [event.target.name]: event.target.value,
     });
   };
 
-  getAll() {
-    axios.get("http://localhost:5000/defects").then((res) => {
-      // console.log(res.data);
+  handleSelect = (name, value) => {
+    if (name === "type") {
       this.setState({
-        data: res.data,
+        type: value,
       });
-    });
-  }
+    } else if (name === "status") {
+      this.setState({
+        status: value,
+      });
+    } else if (name === "severity"){
+      this.setState({
+        severity: value,
+      });
+    }else if (name === "priority") {
+      this.setState({
+        priority:value,
+      });
+    }else if (name === "enteredBy"){
+      this.setState({
+        enteredBy: value,
+      });
+    }else if (name === "assignTo"){
+      this.setState({
+        assignTo: value,
+      });
+    }else if (name === "foundIn"){
+      this.setState({
+        foundIn: value,
+      });
+    }else if (name === "availableIn"){
+      this.setState({
+        availableIn: value,
+      }); 
+    }else if(name === "module"){
+      this.setState({
+        module: value,
+      });
+    }else if (name === "submodule"){
+      this.setState({
+        subModule: value,
+      });
+    }
+  };
 
+  handleTypeChange = (value) => {
+    this.setState({ type: value });
+  };
+  handleStatusChange = (value) => {
+    this.setState({ type: value });
+  };
+
+  // onSubmit(e) {
+  //   e.preventDefault();
+  //   const updateDefects = {
+  //     defectId: this.state.defectsId,
+  //     defectsName: this.state.defectsName,
+  //     stepsToRecreate: this.state.stepsToRecreate,
+  //     type: this.state.type,
+  //     status: this.state.status,
+  //     severity: this.state.severity,
+  //     priority: this.state.priority,
+  //     enteredBy: this.state.enteredBy,
+  //     foundIn: this.state.foundIn,
+  //     availableIn: this.state.availableIn,
+  //   };
+  // }
+  create = (data) => {
+    axios.post("http://localhost:5000/defects", data).then((res) => {
+    });
+  };
+
+  onClickEdit = (record) => {
+    console.log("Test Record", record);
+    this.setState({
+      visible: true,
+      drawerData: record,
+      defectsName: record.defectsName,
+      type: record.type,
+      defectsId: record.defectsId,
+      status: record.status,
+      stepsToRecreate: record.stepToRecreate,
+      severity: record.severity,
+      priority: record.priority,
+      enteredBy: record.enteredBy,
+      foundIn: record.foundIn,
+      availableIn: record.availableIn,
+      module: record.module,
+      subModule: record.subModule,
+      assignTo: record.assignTo
+    });
+  };
+
+  renderDrawer = (record) => (
+    <Form layout="vertical" hideRequiredMark>
+      <Row gutter={16}>
+        <Col span={24}>
+          <Form.Item>
+            <Tag color="#2db7f5"> Defects ID: {record.defectsId} </Tag>
+          </Form.Item>
+        </Col>
+      </Row>
+      <Row gutter={16}>
+        <Col span={24}>
+          <Form.Item
+            // name="defectsName"
+            label="Defect"
+            // value={record.defectsName}
+            // onChange={this.handleChange}
+
+            rules={[
+              {
+                required: true,
+              },
+            ]}
+          >
+            <Input
+              placeholder="Defect"
+              name="defectsName"
+              id="defectsName"
+              // value = {record.defectsName}
+              value={this.state.defectsName}
+              onChange={(event, field) => this.handleChange(event, field)}
+            />
+          </Form.Item>
+        </Col>
+      </Row>
+      <Row gutter={16}>
+        <Col span={24}>
+          <Form.Item
+            // name="stepsToRecreate"
+            label="Steps To Recreate"
+            rules={[
+              {
+                required: true,
+                // message: "please enter the steps to recreate",
+              },
+            ]}
+          >
+            <TextArea
+              name="stepsToRecreate"
+              id="stepsToRecreate"
+              rows={4}
+              placeholder="please enter the steps to recreate"
+              value={this.state.stepsToRecreate} 
+              onChange={(event, field) => this.handleChange(event, field)}
+            />
+          </Form.Item>
+        </Col>
+      </Row>
+      <Row gutter={16}>
+        <Col span={12}>
+          <Form.Item
+            // name="type"
+            label="Type"
+            value={this.state.type}
+            onChange={this.handleChange}
+            rules={[{ required: true, message: "Please select an Type" }]}
+          >
+            <Select
+              placeholder="Please select an Type"
+              name="type"
+              value={this.state.type}
+              onChange={(value) => this.handleSelect("type", value)}
+            >
+              <Option value="Front-End">Fontend</Option>
+              <Option value="Back-End">Backend</Option>
+            </Select>
+          </Form.Item>
+        </Col>
+        <Col span={12}>
+          <Form.Item
+            // name="status"
+            label="Status"
+            rules={[{ required: true, message: "Please choose the status" }]}
+          >
+            <Select
+              placeholder="Please choose the status"
+              name="status"
+              value={this.state.status}
+              onChange={(value) => this.handleSelect("status", value)}
+            >
+              {(() => {
+                switch (record.status) {
+                  case "New":
+                    return (
+                      <>
+                        <Option value="Open">Open</Option>
+                        <Option value="Fixed">Fixed</Option>
+                      </>
+                    );
+                  case "Closed":
+                    return (
+                      <>
+                        <Option value="Re-open">Re-open</Option>
+                      </>
+                    );
+                  case "Fixed":
+                    return (
+                      <>
+                        <Option value="Closed">Close</Option>
+                        <Option value="Re-open">Re-open</Option>
+                      </>
+                    );
+                  case "Re-open":
+                    return (
+                      <>
+                        <Option value="Fixed">Fixed</Option>
+                        <Option value="Open">Open</Option>
+                      </>
+                    );
+                }
+              })()}
+            </Select>
+          </Form.Item>
+        </Col>
+      </Row>
+      <Row gutter={16}>
+        <Col span={12}>
+          <Form.Item
+            // name="serverity"
+            label="Serverity"
+            rules={[{ required: true, message: "Please choose the serverity" }]}
+          >
+            <Select
+              placeholder="Please choose the serverity"
+              name="serverity"
+              value={this.state.severity}
+              onChange={(value) => this.handleSelect("severity", value)}
+            >
+              <Option value="High">High</Option>
+              <Option value="Medium">Medium</Option>
+              <Option value="Low">Low</Option>
+            </Select>
+          </Form.Item>
+        </Col>
+        <Col span={12}>
+          <Form.Item
+            // name="priority"
+            label="Priority"
+            rules={[{ required: true, message: "Please choose the priority" }]}
+          >
+            <Select
+              placeholder="Please choose the priority"
+              name="priority"
+              value={this.state.priority}
+              onChange={(value) => this.handleSelect("priority", value)}
+            >
+              <Option value="High">High</Option>
+              <Option value="Medium">Medium</Option>
+              <Option value="Low">Low</Option>
+            </Select>
+          </Form.Item>
+        </Col>
+      </Row>
+      <Row gutter={16}>
+        <Col span={12}>
+          <Form.Item
+            // name="enteredBy"
+            label="Entered By"
+            rules={[
+              { required: true, message: "Please choose the entered by" },
+            ]}
+          >
+            <Select
+              placeholder="Please choose the entered by"
+              name="enteredBy"
+              value={this.state.enteredBy}
+              onChange={(value) => this.handleSelect("enteredBy", value)}
+            >
+              <Option value="Sanjsijan">Sanjsijan</Option>
+              <Option value="Lavanjan">Lavanjan</Option>
+              <Option value="Sivapiriyan">Sivapiriyan</Option>
+              <Option value="Gobika">Gobika</Option>
+            </Select>
+          </Form.Item>
+        </Col>
+        <Col span={12}>
+          <Form.Item
+            // name="assignTo"
+            label="AssignTo"
+            rules={[{ required: true, message: "Please choose the assign to" }]}
+          >
+            <Select
+              placeholder="Please choose the assign to"
+              name="assignTo"
+              value={this.state.assignTo}
+              onChange={(value) => this.handleSelect("assignTo", value)}
+            >
+              <Option value="Sanjsijan">Sanjsijan</Option>
+              <Option value="Lavanjan">Lavanjan</Option>
+              <Option value="Sivapiriyan">Sivapiriyan</Option>
+              <Option value="Gobika">Gobika</Option>
+            </Select>
+          </Form.Item>
+        </Col>
+      </Row>
+      <Row gutter={16}>
+        <Col span={12}>
+          <Form.Item
+            // name="foundIn"
+            label="Found In"
+            rules={[{ required: true, message: "Please choose the found in" }]}
+          >
+            <Select
+              placeholder="Please choose the found in"
+              name="foundIn"
+              value={this.state.foundIn}
+              onChange={(value) => this.handleSelect("foundIn", value)}
+            >
+              <Option value="Rel-1">Rel-1</Option>
+              <Option value="Rel-2">Rel-2</Option>
+              <Option value="Rel-3">Rel-3</Option>
+              <Option value="Rel-4">Rel-4</Option>
+            </Select>
+          </Form.Item>
+        </Col>
+        <Col span={12}>
+          <Form.Item
+            // name="availableIn"
+            label="Available In"
+            rules={[
+              {
+                required: true,
+                message: "Please choose the available in",
+              },
+            ]}
+          >
+            <Select
+              placeholder="Please choose the available in"
+              name="availableIn"
+              value={this.state.availableIn}
+              onChange={(value) => this.handleSelect("availableIn", value)}
+            >
+              <Option value="Rel-1">Rel-1</Option>
+              <Option value="Rel-2">Rel-2</Option>
+              <Option value="Rel-3">Rel-3</Option>
+              <Option value="Rel-4">Rel-4</Option>
+            </Select>
+          </Form.Item>
+        </Col>
+      </Row>
+      <Row gutter={16}>
+        <Col span={12}>
+          <Form.Item
+            // name="foundIn"
+            label="Module"
+            rules={[{ required: true, message: "Please choose the Module" }]}
+          >
+            <Select
+              placeholder="Please choose the module"
+              name="module"
+              value={this.state.module}
+              onChange={(value) => this.handleSelect("module", value)}
+            >
+              <Option value="Rel-1">Module-01</Option>
+              <Option value="Rel-2">Module-02</Option>
+              <Option value="Rel-3">Module-03</Option>
+              <Option value="Rel-4">Module-04</Option>
+            </Select>
+          </Form.Item>
+        </Col>
+        <Col span={12}>
+          <Form.Item
+            
+            label="SubModule"
+            rules={[
+              {
+                required: true,
+                message: "Please choose the Submodule",
+              },
+            ]}
+          >
+            <Select
+              placeholder="Please choose the Submodule"
+              // name="availableIn"
+              name="submodule"
+              value = {this.state.subModule}
+              onChange={(value) => this.handleSelect("submodule", value)}
+            >
+              <Option value="Rel-1">SubModule-01</Option>
+              <Option value="Rel-2">SubModule-02</Option>
+              <Option value="Rel-3">SubModule-03</Option>
+              <Option value="Rel-4">SubModule-04</Option>
+            </Select>
+          </Form.Item>
+        </Col>
+      </Row>
+    </Form>
+  );
+
+  getAll() {
+    axios
+      .get("http://localhost:5000/defects")
+      .then((res) => {
+        // console.log(res.data);
+        this.setState({
+          data: res.data,
+        });
+      })
+      .then(() => {
+        for (let i = 0; i < this.state.data.length; i++) {
+          switch (this.state.data[i].severity) {
+            case "High":
+              this.setState({
+                high: this.state.high + 1,
+              });
+              break;
+            case "Medium":
+              this.setState({
+                medium: this.state.medium + 1,
+              });
+              break;
+            case "Low":
+              this.setState({
+                low: this.state.low + 1,
+              });
+              break;
+          }
+          switch (this.state.data[i].status) {
+            case "New":
+              this.setState({
+                newdef: this.state.newdef + 1,
+              });
+              break;
+          }
+        }
+      });
+  }
   componentDidMount() {
     this.getAll();
   }
-
-  showDrawer = () => {
-    this.setState({
-      visible: true,
-    });
-  };
-
   onClick = () => {
-    for(let i = 0; i < this.state.data.length; i++){
-      const severityTotal = this.state.data[i].severity;
-      console.log(severityTotal);
-      let totalHigh;
-      
+    for (let i = 0; i < this.state.data.length; i++) {
+      switch (this.state.data[i].severity) {
+        case "High":
+          this.setState({
+            high: this.state.high + 1,
+          });
+          alert(this.state.data.length);
+          break;
+        case "Medium":
+          this.state.medium = this.state.medium + 1;
+          break;
+        case "Low":
+          this.state.low = this.state.low + 1;
+          break;
+      }
     }
-    
-  }
+  };
 
   showDrawerDefectform = () => {
     this.setState({
@@ -135,13 +526,10 @@ export class ViewDefectDetails extends Component {
     });
   };
 
-  getSeverityBreakdown = () => {
-    // console.log(this.state.data);
-  }
-
   onClose = () => {
     this.setState({
       visible: false,
+      drawerData: {},
     });
   };
 
@@ -210,6 +598,49 @@ export class ViewDefectDetails extends Component {
       ),
   });
 
+  handleSubmit = (e) => {
+    const {
+      defectsName,
+      type,
+      defectsId,
+      stepsToRecreate,
+      status,
+      severity,
+      priority,
+      enteredBy,
+      assignTo,
+      foundIn,
+      availableIn,
+      module,
+      subModule,
+    } = this.state;
+    e.preventDefault();
+    const data = [
+      {
+        defectsId:defectsId,
+        defectsName: defectsName,
+        type: type,
+        stepToRecreate: stepsToRecreate,
+        status: status,
+        severity: severity,
+        priority: priority,
+        enteredBy: enteredBy,
+        foundIn: foundIn,
+        availableIn: availableIn,
+        module: module,
+        subModule: subModule,
+        assignTo: assignTo
+      },
+    ];
+    axios.put(`http://localhost:5000/defects/update/${defectsId}`, data)
+      .then((res) => {
+        console.log(res.data);
+        this.setState({
+          data: res.data,
+        });
+      });
+  };
+
   handleSearch = (selectedKeys, confirm, dataIndex) => {
     confirm();
     this.setState({
@@ -226,13 +657,14 @@ export class ViewDefectDetails extends Component {
   render() {
     const columns = [
       {
-        title: "DefectID",
+        title: "ID",
+        width: "1%",
         dataIndex: "defectsId",
         key: "defectsId",
         sorter: (a, b) => a.defectsId - b.defectsId,
         defaultSortOrder: "descend",
         sortDirections: ["descend", "ascend"],
-        ...this.getColumnSearchProps("defectId"),
+        // ...this.getColumnSearchProps("defectId"),
       },
       {
         title: "Defect",
@@ -289,20 +721,22 @@ export class ViewDefectDetails extends Component {
         ],
         filterMultiple: false,
         onFilter: (value, record) => record.status.indexOf(value) === 0,
-        render:(value,record)=> {
+        render: (value, record) => {
           switch (record.status) {
-              case "New": return <Tag color="geekblue">New</Tag>;
-              case "Open": return <Tag color="orange">Medium</Tag>;
-              case "Fixed": return <Tag color="green">Fixed</Tag>;
-              case "Closed": return <Tag color="lime">Closed</Tag>;
-              case "Re-open": return <Tag color="purple">Re-open</Tag>;
-              case "Postpone": return <Tag color="cyan">Postpone</Tag>;
-
+            case "New":
+              return <Tag color="geekblue">New</Tag>;
+            case "Open":
+              return <Tag color="orange">Medium</Tag>;
+            case "Fixed":
+              return <Tag color="green">Fixed</Tag>;
+            case "Closed":
+              return <Tag color="lime">Closed</Tag>;
+            case "Re-open":
+              return <Tag color="purple">Re-open</Tag>;
+            case "Postpone":
+              return <Tag color="cyan">Postpone</Tag>;
           }
-      }  
-        
-
-        
+        },
       },
       {
         title: "Severity",
@@ -324,14 +758,16 @@ export class ViewDefectDetails extends Component {
         ],
         filterMultiple: false,
         onFilter: (value, record) => record.severity.indexOf(value) === 0,
-        render:(value,record)=> {
+        render: (value, record) => {
           switch (record.severity) {
-              case "High": return <Tag color="red">High</Tag>;
-              case "Medium": return <Tag color="orange">Medium</Tag>;
-              case "Low": return <Tag color="green">Low</Tag>;
-
+            case "High":
+              return <Tag color="red">High</Tag>;
+            case "Medium":
+              return <Tag color="orange">Medium</Tag>;
+            case "Low":
+              return <Tag color="green">Low</Tag>;
           }
-      }       
+        },
       },
       {
         title: "Priority",
@@ -353,17 +789,19 @@ export class ViewDefectDetails extends Component {
         ],
         filterMultiple: false,
         onFilter: (value, record) => record.priority.indexOf(value) === 0,
-        render:(value,record)=> {
+        render: (value, record) => {
           switch (record.priority) {
-              case "High": return <Tag color="red">High</Tag>;
-              case "Medium": return <Tag color="orange">Medium</Tag>;
-              case "Low": return <Tag color="green">Low</Tag>;
-
+            case "High":
+              return <Tag color="red">High</Tag>;
+            case "Medium":
+              return <Tag color="orange">Medium</Tag>;
+            case "Low":
+              return <Tag color="green">Low</Tag>;
           }
-      } 
+        },
       },
       {
-        title: "EnteredBy",
+        title: "Entered By",
         dataIndex: "enteredBy",
         key: "enteredBy",
         ...this.getColumnSearchProps("enteredBy"),
@@ -375,39 +813,79 @@ export class ViewDefectDetails extends Component {
         ...this.getColumnSearchProps("assignTo"),
       },
       {
-        title: "View",
-        dataIndex: "view",
-        key: "view",
-        render: () => <a onClick={this.showDrawer}>View</a>,
+        title: "Edit",
+        // dataIndex: "view",
+        key: "edit",
+        render: (record = this.state.selectedRows) => (
+          <a onClick={() => this.onClickEdit(record)}>Edit</a>
+        ),
       },
     ];
+
+    const { drawerData } = this.state;
     return (
       <Fragment>
-        <div>
-          <Link>
+        <Row gutter={8}>
+          <Col span={9}>
             <Button
               type="primary"
               style={{
                 marginBottom: 16,
+                marginTop: 10,
               }}
               onClick={this.showDrawerDefectform}
             >
               Add New Defect
             </Button>
-            <Button onClick = {this.onClick}>Push</Button>
-            <Text strong style={{ marginLeft: "300px" }}>
-              Severity Breakdown
-            </Text>
-            &nbsp;&nbsp;&nbsp;
-            <Text strong style={{}}>
-              High: 10
-            </Text>
-          </Link>
-          <Text style={{ marginLeft: "450px" }} mark>
-            Total Defects: {this.state.data.length}
-          </Text>
-          <Table columns={columns} dataSource={this.state.data} />
-        </div>
+          </Col>
+          <Col span={3}>
+            <Statistic
+              title="High Severity"
+              style={{ textAlign: "center" }}
+              value={this.state.high}
+              valueStyle={{ color: "red", textAlign: "center" }}
+              prefix={<RiseOutlined />}
+            ></Statistic>
+          </Col>
+          <Col span={3}>
+            <Statistic
+              title="Medium Severity"
+              style={{ textAlign: "center" }}
+              value={this.state.medium}
+              valueStyle={{ color: "orange", textAlign: "center" }}
+              prefix={<StockOutlined />}
+            ></Statistic>
+          </Col>
+          <Col span={3}>
+            <Statistic
+              title="Low Severity"
+              style={{ textAlign: "center" }}
+              value={this.state.low}
+              valueStyle={{ color: "green", textAlign: "center" }}
+              prefix={<FallOutlined />}
+            ></Statistic>
+          </Col>
+          <Col span={3}>
+            <Statistic
+              title="New Defects"
+              style={{ textAlign: "center" }}
+              value={this.state.newdef}
+              valueStyle={{ color: "blue", textAlign: "center" }}
+              prefix={<RadarChartOutlined />}
+            ></Statistic>
+          </Col>
+          <Col span={3}>
+            <Statistic
+              title="Total Defects"
+              style={{ textAlign: "center" }}
+              value={this.state.data.length}
+              valueStyle={{ color: "magenta", textAlign: "center" }}
+              prefix={<BugOutlined />}
+            ></Statistic>
+          </Col>
+        </Row>
+        <br></br>
+        <Table columns={columns} dataSource={this.state.data} />
 
         <Drawer
           title="Update Defect Details"
@@ -424,219 +902,16 @@ export class ViewDefectDetails extends Component {
               <Button onClick={this.onClose} style={{ marginRight: 8 }}>
                 Cancel
               </Button>
-              <Button onClick={this.onClose} type="primary">
+              <Button onClick={(e) => this.handleSubmit(e)} type="primary">
                 Update
               </Button>
             </div>
           }
         >
-          <Form layout="vertical" hideRequiredMark>
-            <Row gutter={16}>
-              <Col span={24}>
-                <Form.Item>
-                  <Tag color="#2db7f5">Defect ID : de11005</Tag>
-                </Form.Item>
-              </Col>
-            </Row>
-            <Row gutter={16}>
-              <Col span={24}>
-                <Form.Item
-                  name="defect"
-                  label="Defect"
-                  value={this.state.defect}
-                  onChange={this.handleChange}
-                  rules={[
-                    {
-                      required: true,
-                    },
-                  ]}
-                >
-                  <Input placeholder="Defect" name="defectsName" />
-                </Form.Item>
-              </Col>
-            </Row>
-            <Row gutter={16}>
-              <Col span={24}>
-                <Form.Item
-                  name="stepsToRecreate"
-                  label="Steps To Recreate"
-                  rules={[
-                    {
-                      required: true,
-                      message: "please enter the steps to recreate",
-                    },
-                  ]}
-                >
-                  <Input.TextArea
-                    name="stepsToRecreate"
-                    rows={4}
-                    placeholder="please enter the steps to recreate"
-                  />
-                </Form.Item>
-              </Col>
-            </Row>
-            <Row gutter={16}>
-              <Col span={12}>
-                <Form.Item
-                  name="type"
-                  label="Type"
-                  value={this.state.type}
-                  onChange={this.handleChange}
-                  rules={[{ required: true, message: "Please select an Type" }]}
-                >
-                  <Select placeholder="Please select an Type" name="type">
-                    <Option value="Front-End">Fontend</Option>
-                    <Option value="Back-End">Backend</Option>
-                  </Select>
-                </Form.Item>
-              </Col>
-              <Col span={12}>
-                <Form.Item
-                  name="status"
-                  label="Status"
-                  rules={[
-                    { required: true, message: "Please choose the status" },
-                  ]}
-                >
-                  <Select placeholder="Please choose the status" name="status">
-                    <Option value="New">New</Option>
-                    <Option value="Open">Open</Option>
-                    <Option value="Fixed">Fixed</Option>
-                    <Option value="Closed">Closed</Option>
-                    <Option value="Re-open">Re-open</Option>
-                    <Option value="Postpone">Postpone</Option>
-                  </Select>
-                </Form.Item>
-              </Col>
-            </Row>
-            <Row gutter={16}>
-              <Col span={12}>
-                <Form.Item
-                  name="serverity"
-                  label="Serverity"
-                  rules={[
-                    { required: true, message: "Please choose the serverity" },
-                  ]}
-                >
-                  <Select
-                    placeholder="Please choose the serverity"
-                    name="serverity"
-                  >
-                    <Option value="High">High</Option>
-                    <Option value="Medium">Medium</Option>
-                    <Option value="Low">Low</Option>
-                  </Select>
-                </Form.Item>
-              </Col>
-              <Col span={12}>
-                <Form.Item
-                  name="priority"
-                  label="Priority"
-                  rules={[
-                    { required: true, message: "Please choose the priority" },
-                  ]}
-                >
-                  <Select
-                    placeholder="Please choose the priority"
-                    name="priority"
-                  >
-                    <Option value="High">High</Option>
-                    <Option value="Medium">Medium</Option>
-                    <Option value="Low">Low</Option>
-                  </Select>
-                </Form.Item>
-              </Col>
-            </Row>
-            <Row gutter={16}>
-              <Col span={12}>
-                <Form.Item
-                  name="enteredBy"
-                  label="Entered By"
-                  rules={[
-                    { required: true, message: "Please choose the entered by" },
-                  ]}
-                >
-                  <Select
-                    placeholder="Please choose the entered by"
-                    name="enteredBy"
-                  >
-                    <Option value="Sanjsijan">Sanjsijan</Option>
-                    <Option value="Lavanjan">Lavanjan</Option>
-                    <Option value="Sivapiriyan">Sivapiriyan</Option>
-                    <Option value="Gobika">Gobika</Option>
-                  </Select>
-                </Form.Item>
-              </Col>
-              <Col span={12}>
-                <Form.Item
-                  name="assignTo"
-                  label="AssignTo"
-                  rules={[
-                    { required: true, message: "Please choose the assign to" },
-                  ]}
-                >
-                  <Select
-                    placeholder="Please choose the assign to"
-                    name="assignTo"
-                  >
-                    <Option value="Sanjsijan">Sanjsijan</Option>
-                    <Option value="Lavanjan">Lavanjan</Option>
-                    <Option value="Sivapiriyan">Sivapiriyan</Option>
-                    <Option value="Gobika">Gobika</Option>
-                  </Select>
-                </Form.Item>
-              </Col>
-            </Row>
-            <Row gutter={16}>
-              <Col span={12}>
-                <Form.Item
-                  name="foundIn"
-                  label="Found In"
-                  rules={[
-                    { required: true, message: "Please choose the found in" },
-                  ]}
-                >
-                  <Select
-                    placeholder="Please choose the found in"
-                    name="foundIn"
-                  >
-                    <Option value="Rel-1">Rel-1</Option>
-                    <Option value="Rel-2">Rel-2</Option>
-                    <Option value="Rel-3">Rel-3</Option>
-                    <Option value="Rel-4">Rel-4</Option>
-                  </Select>
-                </Form.Item>
-              </Col>
-              <Col span={12}>
-                <Form.Item
-                  name="availableIn"
-                  label="Available In"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Please choose the available in",
-                    },
-                  ]}
-                >
-                  <Select
-                    placeholder="Please choose the available in"
-                    name="availableIn"
-                  >
-                    <Option value="Rel-1">Rel-1</Option>
-                    <Option value="Rel-2">Rel-2</Option>
-                    <Option value="Rel-3">Rel-3</Option>
-                    <Option value="Rel-4">Rel-4</Option>
-                  </Select>
-                </Form.Item>
-              </Col>
-            </Row>
-          </Form>
+          {this.renderDrawer(drawerData)}
         </Drawer>
-<<<<<<< HEAD
         <AddDefectDetailsForm show={this.state.show} data={this.state.data} />
-=======
-        <AddDefectDetailsForm show={this.state.show} data={this.state.data}/>
->>>>>>> 293bf55b032137cb3d2444b858d008c19b4ce0be
+
         {/*  */}
       </Fragment>
     );
