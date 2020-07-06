@@ -21,6 +21,7 @@ export class AddDefectDetailsForm extends Component {
             this.setState({
                 show: true
             })
+            
 
         }
     }
@@ -46,8 +47,8 @@ export class AddDefectDetailsForm extends Component {
     onClose = () => {
         this.setState({
             show: false
-        })
-        window.location.reload();
+        })  
+        window.location.reload();      
     };
 
     handleChange = (event) => {
@@ -110,7 +111,7 @@ export class AddDefectDetailsForm extends Component {
         })
         this.props.adddefect(this.state.defects)
         this.formRef.current.resetFields();
-        window.location.reload();
+        window.location.reload();   
 
     }
     // onClick=()=>{
