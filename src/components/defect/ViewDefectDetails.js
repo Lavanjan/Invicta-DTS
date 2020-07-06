@@ -223,8 +223,9 @@ export class ViewDefectDetails extends Component {
               value={this.state.type}
               onChange={(value) => this.handleSelect("type", value)}
             >
-              <Option value="Front-End">Fontend</Option>
-              <Option value="Back-End">Backend</Option>
+              <Option value="Functional">Functional</Option>
+              <Option value="Performance">Performance</Option>
+              <Option value="UI">UI</Option>
             </Select>
           </Form.Item>
         </Col>
@@ -246,7 +247,7 @@ export class ViewDefectDetails extends Component {
                     return (
                       <>
                         <Option value="Open">Open</Option>
-                        <Option value="Fixed">Fixed</Option>
+                        <Option value="Reject">Reject</Option>
                       </>
                     );
                   case "Closed":
@@ -258,17 +259,31 @@ export class ViewDefectDetails extends Component {
                   case "Fixed":
                     return (
                       <>
-                        <Option value="Closed">Close</Option>
+                        <Option value="Closed">Closed</Option>
                         <Option value="Re-open">Re-open</Option>
                       </>
                     );
                   case "Re-open":
                     return (
                       <>
-                        <Option value="Fixed">Fixed</Option>
                         <Option value="Open">Open</Option>
+                        <Option value="Reject">Reject</Option>
                       </>
                     );
+                    case "Open":
+                      return (
+                        <>
+                          <Option value="Fixed">Fixed</Option>
+                          <Option value="Reject">Reject</Option>
+                        </>
+                      );
+                      case "Reject":
+                        return (
+                          <>
+                            <Option value="Re-open">Re-open</Option>
+                            <Option value="Closed">Closed</Option>
+                          </>
+                        );
                 }
               })()}
             </Select>
@@ -413,10 +428,10 @@ export class ViewDefectDetails extends Component {
               value={this.state.module}
               onChange={(value) => this.handleSelect("module", value)}
             >
-              <Option value="Rel-1">Module-01</Option>
-              <Option value="Rel-2">Module-02</Option>
-              <Option value="Rel-3">Module-03</Option>
-              <Option value="Rel-4">Module-04</Option>
+              <Option value="Module-1">Module-1</Option>
+              <Option value="Module-2">Module-2</Option>
+              <Option value="Module-3">Module-3</Option>
+              <Option value="Module-4">Module-4</Option>
             </Select>
           </Form.Item>
         </Col>
@@ -437,10 +452,10 @@ export class ViewDefectDetails extends Component {
               value={this.state.subModule}
               onChange={(value) => this.handleSelect("submodule", value)}
             >
-              <Option value="Rel-1">SubModule-01</Option>
-              <Option value="Rel-2">SubModule-02</Option>
-              <Option value="Rel-3">SubModule-03</Option>
-              <Option value="Rel-4">SubModule-04</Option>
+              <Option value="SubModule-1">SubModule-1</Option>
+              <Option value="SubModule-2">SubModule-2</Option>
+              <Option value="SubModule-3">SubModule-3</Option>
+              <Option value="SubModule-4">SubModule-4</Option>
             </Select>
           </Form.Item>
         </Col>
@@ -629,7 +644,7 @@ export class ViewDefectDetails extends Component {
           visible:false
         });
       });
-    window.location.reload(false);
+    window.location.reload();
   };
 
   handleSearch = (selectedKeys, confirm, dataIndex) => {
@@ -669,16 +684,38 @@ export class ViewDefectDetails extends Component {
         key: "type",
         filters: [
           {
-            text: "Front End",
-            value: "Front End",
+            text: "Functional",
+            value: "Functional",
           },
           {
-            text: "Back End",
-            value: "Back End",
+            text: "Performance",
+            value: "Performance",
+          },
+          {
+            text: "UI",
+            value: "UI",
           },
         ],
         filterMultiple: false,
         onFilter: (value, record) => record.type.indexOf(value) === 0,
+      },
+      {
+        title: "Module",
+        dataIndex: "module",
+        key: "module",
+        // filters: [
+        //   {
+        //     text: "Module",
+        //     value: "Front End",
+        //   },
+        //   {
+        //     text: "Back End",
+        //     value: "Back End",
+        //   },
+        // ],
+        filterMultiple: false,
+        // onFilter: (value, record) => record.module.indexOf(value) === 0,
+        ...this.getColumnSearchProps("module"),
       },
       {
         title: "Status",
@@ -717,7 +754,7 @@ export class ViewDefectDetails extends Component {
             case "New":
               return <Tag color="geekblue">New</Tag>;
             case "Open":
-              return <Tag color="orange">Medium</Tag>;
+              return <Tag color="orange">Open</Tag>;
             case "Fixed":
               return <Tag color="green">Fixed</Tag>;
             case "Closed":
@@ -726,6 +763,8 @@ export class ViewDefectDetails extends Component {
               return <Tag color="purple">Re-open</Tag>;
             case "Postpone":
               return <Tag color="cyan">Postpone</Tag>;
+              case "Reject":
+              return <Tag color="red">Reject</Tag>;
           }
         },
       },
