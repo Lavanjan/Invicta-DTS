@@ -27,10 +27,10 @@ code {
   border: 0px solid rgb(3, 27, 63);
 }
 .logo {
-  width: 150px;
+  width: 200px;
   height: 30px;
   /* background: rgba(255, 255, 255, 0.2); */
-  background-image: url(./assets/images/1234.png);
+  background-image: url(./assets/images/logo.jpg);
   margin: 18px 10px 10px 0;
   float: left;
 }

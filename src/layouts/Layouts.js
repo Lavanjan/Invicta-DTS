@@ -35,11 +35,6 @@ const menu = (
         &nbsp;&nbsp;Manage Employee
       </a>
     </Menu.Item>
-    {/* <Menu.Item>
-      <a rel="noopener noreferrer" href="/employee-allocation">
-      <UserSwitchOutlined />&nbsp;&nbsp;Employee Allocation
-      </a>
-    </Menu.Item> */}
   </Menu>
 );
 
@@ -61,6 +56,7 @@ export class Layouts extends Component {
           <Header>
             <Link to="/">
               <div className="logo" />
+            <HomeOutlined style={{ fontSize: "25px", color:'white', marginTop:20}} />
             </Link>
             <div className="sub">
               <Dropdown overlay={menu}>
@@ -77,7 +73,7 @@ export class Layouts extends Component {
           <Content style={{ padding: "0 50px" }}>
             <Link to="/">
               <Breadcrumb style={{ margin: "16px 0" }}>
-                <HomeOutlined style={{ fontSize: "20px" }} />
+                
                 &nbsp;&nbsp;&nbsp;
                 <Breadcrumb.Item>Invicta Defect Tracker System</Breadcrumb.Item>
               </Breadcrumb>

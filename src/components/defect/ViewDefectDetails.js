@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from "react";
 import { Link } from "react-router-dom";
-import { Table, Input, Button, Space, Tag, Badge } from "antd";
+import { Table, Input, Button, Space, Tag, Badge, notification } from "antd";
 import Highlighter from "react-highlight-words";
 import {
   SearchOutlined,
@@ -18,6 +18,13 @@ import AddDefectDetailsForm from "./AddDefectDetailsForm";
 const { Text } = Typography;
 const { Option } = Select;
 const { TextArea } = Input;
+
+const openNotificationWithIcon = type => {
+    notification[type]({
+      message: 'Notification Title',
+      description: 'This is Notification',
+    });
+};
 
 export class ViewDefectDetails extends Component {
   constructor(props) {
@@ -617,7 +624,7 @@ export class ViewDefectDetails extends Component {
       module,
       subModule,
     } = this.state;
-    e.preventDefault();
+    // e.preventDefault();
     const data =
     {
       defectsId:defectsId,
@@ -645,6 +652,7 @@ export class ViewDefectDetails extends Component {
         });
       });
     window.location.reload();
+    openNotificationWithIcon('success');
   };
 
   handleSearch = (selectedKeys, confirm, dataIndex) => {
@@ -673,10 +681,10 @@ export class ViewDefectDetails extends Component {
         // ...this.getColumnSearchProps("defectId"),
       },
       {
-        title: "Defect",
+        title: "Defect Description",
         dataIndex: "defectsName",
         key: "defectsName",
-        ...this.getColumnSearchProps("description"),
+        ...this.getColumnSearchProps("defectsName"),
       },
       {
         title: "Type",
@@ -915,7 +923,8 @@ export class ViewDefectDetails extends Component {
           </Col>
         </Row>
         <br></br>
-        <Table columns={columns} dataSource={this.state.data} />
+        <Table
+         columns={columns} dataSource={this.state.data} />
 
         <Drawer
           title="Update Defect Details"
