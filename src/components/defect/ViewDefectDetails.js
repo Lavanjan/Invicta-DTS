@@ -121,21 +121,6 @@ export class ViewDefectDetails extends Component {
     this.setState({ type: value });
   };
 
-  // onSubmit(e) {
-  //   e.preventDefault();
-  //   const updateDefects = {
-  //     defectId: this.state.defectsId,
-  //     defectsName: this.state.defectsName,
-  //     stepsToRecreate: this.state.stepsToRecreate,
-  //     type: this.state.type,
-  //     status: this.state.status,
-  //     severity: this.state.severity,
-  //     priority: this.state.priority,
-  //     enteredBy: this.state.enteredBy,
-  //     foundIn: this.state.foundIn,
-  //     availableIn: this.state.availableIn,
-  //   };
-  // }
   create = (data) => {
     axios.post("http://localhost:5000/defects", data).then((res) => {
     });
