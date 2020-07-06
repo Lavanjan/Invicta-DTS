@@ -41,7 +41,7 @@ export class AddDefectDetailsForm extends Component {
         foundIn: '',
         module: '',
         subModule: '',
-        availableIn: 'Rl-1'
+        availableIn: 'Rel-1'
     }
 
     onClose = () => {
@@ -195,9 +195,9 @@ export class AddDefectDetailsForm extends Component {
                                     ]}
                                 >
                                     <Select value={this.state.module} defaultValue="Select Module" name="module" onChange={this.handlemoduleChange}>
-                                        <Option value="Module - 1">Module - 1</Option>
-                                        <Option value="Module - 2">Module - 2</Option>
-                                        <Option value="Module - 3">Module - 3</Option>
+                                        <Option value="Module-1">Module-1</Option>
+                                        <Option value="Module-2">Module-2</Option>
+                                        <Option value="Module-3">Module-3</Option>
                                     </Select>
                                 </Form.Item>
                             </Col>
@@ -213,12 +213,12 @@ export class AddDefectDetailsForm extends Component {
                                 >
 
                                     <Select value={this.state.subModule} defaultValue="Select Sub Module" name="subModule" onChange={this.handleSubModuleChange}>
-                                        <Option value="Sub Module - 1">Sub Module - 1</Option>
-                                        <Option value="Sub Module - 2">Sub Module - 2</Option>
-                                        <Option value="Sub Module - 3">Sub Module - 3</Option>
-                                        <Option value="Sub Module - 4">Sub Module - 4</Option>
-                                        <Option value="Sub Module - 5">Sub Module - 5</Option>
-                                        <Option value="Sub Module - 6">Sub Module - 6</Option>
+                                        <Option value="Sub Module-1">Sub Module-1</Option>
+                                        <Option value="Sub Module-2">Sub Module-2</Option>
+                                        <Option value="Sub Module-3">Sub Module-3</Option>
+                                        <Option value="Sub Module-4">Sub Module-4</Option>
+                                        <Option value="Sub Module-5">Sub Module-5</Option>
+                                        <Option value="Sub Module-6">Sub Module-6</Option>
 
                                     </Select>
                                 </Form.Item>
@@ -236,8 +236,8 @@ export class AddDefectDetailsForm extends Component {
                                     ]}
                                 >
                                     <Select value={this.state.type} defaultValue="Select Type" name="type" onChange={this.handleTypeChange}>
-                                        <Option value="Front End">Front End</Option>
-                                        <Option value="Back End">Back End</Option>
+                                        <Option value="Functional">Functional</Option>
+                                        <Option value="Performance">Performance</Option>
                                         <Option value="UI">UI</Option>
                                     </Select>
                                 </Form.Item>
