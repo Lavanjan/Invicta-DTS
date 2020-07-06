@@ -26,7 +26,7 @@ export class ViewDefectDetails extends Component {
       id: "",
       defectsId: "",
       defectsName: "",
-      stepsToRecreate: "",
+      stepToRecreate: "Hello Dear",
       type: "",
       status: "",
       severity: "",
@@ -34,9 +34,9 @@ export class ViewDefectDetails extends Component {
       enteredBy: "",
       foundIn: "",
       availableIn: "",
-      assignTo:"",
-      module:"",
-      subModule:"",
+      assignTo: "",
+      module: "",
+      subModule: "",
       high: 0,
       medium: 0,
       low: 0,
@@ -44,6 +44,8 @@ export class ViewDefectDetails extends Component {
       severityTotal: [],
       selectedRows: [],
       selectedData: [],
+      rId: '',
+      putData:[],
 
       searchText: "",
       searchedColumn: "",
@@ -54,6 +56,8 @@ export class ViewDefectDetails extends Component {
       drawerData: {},
       totalHigher: "",
     };
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -79,78 +83,63 @@ export class ViewDefectDetails extends Component {
       this.setState({
         status: value,
       });
-    } else if (name === "severity"){
+    } else if (name === "severity") {
       this.setState({
         severity: value,
       });
-    }else if (name === "priority") {
+    } else if (name === "priority") {
       this.setState({
-        priority:value,
+        priority: value,
       });
-    }else if (name === "enteredBy"){
+    } else if (name === "enteredBy") {
       this.setState({
         enteredBy: value,
       });
-    }else if (name === "assignTo"){
+    } else if (name === "assignTo") {
       this.setState({
         assignTo: value,
       });
-    }else if (name === "foundIn"){
+    } else if (name === "foundIn") {
       this.setState({
         foundIn: value,
       });
-    }else if (name === "availableIn"){
+    } else if (name === "availableIn") {
       this.setState({
         availableIn: value,
-      }); 
-    }else if(name === "module"){
+      });
+    } else if (name === "module") {
       this.setState({
         module: value,
       });
-    }else if (name === "submodule"){
+    } else if (name === "submodule") {
       this.setState({
         subModule: value,
       });
     }
   };
 
-  handleTypeChange = (value) => {
-    this.setState({ type: value });
-  };
-  handleStatusChange = (value) => {
-    this.setState({ type: value });
-  };
+  // handleTypeChange = (value) => {
+  //   this.setState({ type: value });
+  // };
+  // handleStatusChange = (value) => {
+  //   this.setState({ type: value });
+  // };
 
-  // onSubmit(e) {
-  //   e.preventDefault();
-  //   const updateDefects = {
-  //     defectId: this.state.defectsId,
-  //     defectsName: this.state.defectsName,
-  //     stepsToRecreate: this.state.stepsToRecreate,
-  //     type: this.state.type,
-  //     status: this.state.status,
-  //     severity: this.state.severity,
-  //     priority: this.state.priority,
-  //     enteredBy: this.state.enteredBy,
-  //     foundIn: this.state.foundIn,
-  //     availableIn: this.state.availableIn,
-  //   };
-  // }
   create = (data) => {
-    axios.post("http://localhost:5000/defects", data).then((res) => {
-    });
+    axios.post("http://localhost:5000/defects", data).then((res) => {});
   };
 
   onClickEdit = (record) => {
-    console.log("Test Record", record);
+    console.log("Test Record", record._id);
     this.setState({
+      rId:record._id,
       visible: true,
       drawerData: record,
       defectsName: record.defectsName,
       type: record.type,
       defectsId: record.defectsId,
       status: record.status,
-      stepsToRecreate: record.stepToRecreate,
+      stepToRecreate: record.stepToRecreate,
       severity: record.severity,
       priority: record.priority,
       enteredBy: record.enteredBy,
@@ -158,7 +147,7 @@ export class ViewDefectDetails extends Component {
       availableIn: record.availableIn,
       module: record.module,
       subModule: record.subModule,
-      assignTo: record.assignTo
+      assignTo: record.assignTo,
     });
   };
 
@@ -208,12 +197,12 @@ export class ViewDefectDetails extends Component {
               },
             ]}
           >
-            <TextArea
-              name="stepsToRecreate"
-              id="stepsToRecreate"
+            <Input.TextArea
+              name="stepToRecreate"
+              // id="stepToRecreate"
               rows={4}
               placeholder="please enter the steps to recreate"
-              value={this.state.stepsToRecreate} 
+              value={this.state.stepToRecreate}
               onChange={(event, field) => this.handleChange(event, field)}
             />
           </Form.Item>
@@ -433,7 +422,6 @@ export class ViewDefectDetails extends Component {
         </Col>
         <Col span={12}>
           <Form.Item
-            
             label="SubModule"
             rules={[
               {
@@ -446,7 +434,7 @@ export class ViewDefectDetails extends Component {
               placeholder="Please choose the Submodule"
               // name="availableIn"
               name="submodule"
-              value = {this.state.subModule}
+              value={this.state.subModule}
               onChange={(value) => this.handleSelect("submodule", value)}
             >
               <Option value="Rel-1">SubModule-01</Option>
@@ -603,7 +591,7 @@ export class ViewDefectDetails extends Component {
       defectsName,
       type,
       defectsId,
-      stepsToRecreate,
+      stepToRecreate,
       status,
       severity,
       priority,
@@ -615,30 +603,33 @@ export class ViewDefectDetails extends Component {
       subModule,
     } = this.state;
     e.preventDefault();
-    const data = [
-      {
-        defectsId:defectsId,
-        defectsName: defectsName,
-        type: type,
-        stepToRecreate: stepsToRecreate,
-        status: status,
-        severity: severity,
-        priority: priority,
-        enteredBy: enteredBy,
-        foundIn: foundIn,
-        availableIn: availableIn,
-        module: module,
-        subModule: subModule,
-        assignTo: assignTo
-      },
-    ];
-    axios.put(`http://localhost:5000/defects/update/${defectsId}`, data)
+    const data =
+    {
+      defectsId:defectsId,
+      defectsName: defectsName,
+      type: type,
+      stepToRecreate: stepToRecreate,
+      status: status,
+      severity: severity,
+      priority: priority,
+      enteredBy: enteredBy,
+      foundIn: foundIn,
+      availableIn: availableIn,
+      module: module,
+      subModule: subModule,
+      assignTo: assignTo,
+    };
+    console.log(data);
+    axios
+      .put(`http://localhost:5000/defects/update/${this.state.rId}`, data)
       .then((res) => {
         console.log(res.data);
         this.setState({
-          data: res.data,
+          putData: res.data,
+          visible:false
         });
       });
+    window.location.reload(false);
   };
 
   handleSearch = (selectedKeys, confirm, dataIndex) => {
