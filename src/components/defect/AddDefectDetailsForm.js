@@ -1,12 +1,13 @@
 import React, { Component } from 'react'
-import { Drawer, Form, Col, Row, Select, Tag, Input, Button,Typography } from "antd";
+import { Drawer, Form, Col, Row, Select, Tag, Input, Button, Typography } from "antd";
 import { PlusCircleOutlined, ClearOutlined } from '@ant-design/icons';
 import { connect } from 'react-redux';
 import { message } from 'antd';
+import { withRouter } from "react-router-dom";
 import { adddefect } from '../redux/action/ActionDefect';
 const { Option } = Select;
 const { TextArea } = Input;
-const { Text} = Typography;
+const { Text } = Typography;
 
 export class AddDefectDetailsForm extends Component {
     formRef = React.createRef();
@@ -16,19 +17,27 @@ export class AddDefectDetailsForm extends Component {
         if (nextProps.msg) {
             message.loading('Action in progress..')
                 .then(() => message.success(nextProps.msg))
-
+                .then(() => {
+                    this.setState({
+                        show: false
+                    })
+                }).then(()=>{
+                    window.location.reload()
+                })
         }
-        else if (nextProps.show) {
+
+       else if (nextProps.show) {
             this.setState({
                 show: true
-            })           
+            })
+            
 
         }
     }
     state = {
         show: false,
         defects: {},
-        err: 'err',        
+        err: 'err',
         defect: '',
         stepToRecreate: '',
         type: '',
@@ -46,8 +55,8 @@ export class AddDefectDetailsForm extends Component {
     onClose = () => {
         this.setState({
             show: false
-        })  
-        window.location.reload();      
+        })
+        window.location.reload();
     };
 
     handleChange = (event) => {
@@ -88,10 +97,10 @@ export class AddDefectDetailsForm extends Component {
             subModule: value
         })
     }
-    
-    handleSubmit = (event) => {        
+
+    handleSubmit = (event) => {
         this.setState({
-            defects: {                
+            defects: {
                 defectsName: this.state.defect,
                 stepToRecreate: this.state.stepToRecreate,
                 type: this.state.type,
@@ -108,10 +117,12 @@ export class AddDefectDetailsForm extends Component {
         })
         this.props.adddefect(this.state.defects)
         this.formRef.current.resetFields();
-        window.location.reload();         
+        // window.location.reload();
+
+
 
     }
-    
+
     render() {
         return (
             <div>
@@ -128,14 +139,14 @@ export class AddDefectDetailsForm extends Component {
 
                             <Col span={12}>
                                 <Form.Item>
-                                    <Text style={{ fontSize: 15, color: "black"}}>Defect ID : </Text>
-                                    <Tag color="#2db7f5" name="defectId" style={{ fontSize: 15,color: "black" }}>{this.props.data.length+1}</Tag>
+                                    <Text style={{ fontSize: 15, color: "black" }}>Defect ID : </Text>
+                                    <Tag color="#2db7f5" name="defectId" style={{ fontSize: 15, color: "black" }}>{this.props.data.length + 1}</Tag>
                                 </Form.Item>
                             </Col>
                             <Col span={12}>
                                 <Form.Item>
-                                    <Text style={{ fontSize: 15, color: "black", marginLeft: 210 }}>Status : </Text>                                    
-                                    <Tag color="#2db7f5" name="status" style={{ fontSize: 15,color: "black" }}>NEW</Tag>
+                                    <Text style={{ fontSize: 15, color: "black", marginLeft: 210 }}>Status : </Text>
+                                    <Tag color="#2db7f5" name="status" style={{ fontSize: 15, color: "black" }}>NEW</Tag>
                                 </Form.Item>
                             </Col>
 
@@ -338,7 +349,7 @@ export class AddDefectDetailsForm extends Component {
                                 <Button type="primary" htmlType="submit" style={{ width: 100 }}>
                                     <PlusCircleOutlined />  Submit
                                  </Button>
-                                 {/* <Button onClick={this.onClick}>alert</Button> */}
+                                {/* <Button onClick={this.onClick}>alert</Button> */}
                             </Form.Item>
 
                         </Row>
@@ -359,4 +370,4 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 
     }
 }
-export default connect(mapStateToProps, mapDispatchToProps)(AddDefectDetailsForm)
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(AddDefectDetailsForm))
