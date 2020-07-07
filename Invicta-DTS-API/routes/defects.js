@@ -20,7 +20,7 @@ router.route('/add').post((req, res) => {
   const foundIn = req.body.foundIn;
   const availableIn = req.body.availableIn;
   const module = req.body.module;
-  const subModule = req.body.subModule;
+  const subModule = req.body.subModule; 
 
   const newDefects = new defects({
     defectsId,

@@ -22,8 +22,7 @@ const validateMessages = {
 };
 
 export class AddEmployeeForm extends Component {
-    state={
-        id:'001',
+    state={        
         name:'',
         email:'',
         number:'',
@@ -39,15 +38,15 @@ export class AddEmployeeForm extends Component {
     }
     onFinish= (event) => {        
         
-           const employee={
-                employeeId:this.state.id,
+           const employee={                
                 employeeName:this.state.name,
                 employeeEmail:this.state.email,
                 employeeMobileNumber:this.state.email,
                 employeeDepartment:this.state.department
             }
     
-        this.props.addemployee(employee);
+        this.props.addemployee(employee); 
+        this.props.messageShow('success');
         
         
     }

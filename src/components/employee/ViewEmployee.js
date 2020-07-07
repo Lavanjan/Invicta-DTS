@@ -105,8 +105,8 @@ export class ViewEmployee extends Component {
     const columns = [
       {
         title: "Employee ID",
-        dataIndex: "employeeId",
-        key: "employeeId",
+        dataIndex: "_id",
+        key: "_id",
         ...this.getColumnSearchProps("Id"),
       },
       {
