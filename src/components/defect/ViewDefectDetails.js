@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from "react";
 import { Link } from "react-router-dom";
-import { Table, Input, Button, Space, Tag, Badge, notification } from "antd";
+import { Table, Input, Button, Space, Tag, Badge, notification, Modal } from "antd";
 import Highlighter from "react-highlight-words";
 import {
   SearchOutlined,
@@ -8,7 +8,9 @@ import {
   RiseOutlined,
   StockOutlined,
   BugOutlined,
+  EditOutlined,
   RadarChartOutlined,
+  FolderViewOutlined
 } from "@ant-design/icons";
 import "antd/dist/antd.css";
 import { Drawer, Form, Col, Row, Select, Typography, Statistic } from "antd";
@@ -19,11 +21,11 @@ const { Text } = Typography;
 const { Option } = Select;
 const { TextArea } = Input;
 
-const openNotificationWithIcon = type => {
-    notification[type]({
-      message: 'Notification Title',
-      description: 'This is Notification',
-    });
+const openNotificationWithIcon = (type) => {
+  notification[type]({
+    message: "Notification Title",
+    description: "This is Notification",
+  });
 };
 
 export class ViewDefectDetails extends Component {
@@ -51,9 +53,10 @@ export class ViewDefectDetails extends Component {
       severityTotal: [],
       selectedRows: [],
       selectedData: [],
-      rId: '',
-      putData:[],
-
+      rId: "",
+      putData: [],
+      filteredInfo: null,
+      sortedInfo: null,
       searchText: "",
       searchedColumn: "",
       visible: false,
@@ -62,6 +65,7 @@ export class ViewDefectDetails extends Component {
       show: false,
       drawerData: {},
       totalHigher: "",
+      viewVisible: false
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -73,11 +77,48 @@ export class ViewDefectDetails extends Component {
     }
   }
 
+  showModal = () => {
+    this.setState({
+      viewVisible: true,
+    });
+  };
+  handleOk = e => {
+    console.log(e);
+    this.setState({
+      viewVisible: false,
+    });
+  };
+
+  handleCancel = e => {
+    console.log(e);
+    this.setState({
+      viewVisible: false,
+    });
+  };
+
   handleChange = (event, field) => {
     console.log(event.target.name);
     console.log(field);
     this.setState({
       [event.target.name]: event.target.value,
+    });
+  };
+
+  filterHandleChange = (pagination, filters, sorter) => {
+    console.log("Various parameters", pagination, filters, sorter);
+    this.setState({
+      filteredInfo: filters,
+      sortedInfo: sorter,
+    });
+  };
+  clearFilters = () => {
+    this.setState({ filteredInfo: null });
+  };
+
+  clearAll = () => {
+    this.setState({
+      filteredInfo: null,
+      sortedInfo: null,
     });
   };
 
@@ -125,21 +166,37 @@ export class ViewDefectDetails extends Component {
     }
   };
 
-  // handleTypeChange = (value) => {
-  //   this.setState({ type: value });
-  // };
-  // handleStatusChange = (value) => {
-  //   this.setState({ type: value });
-  // };
-
   create = (data) => {
     axios.post("http://localhost:5000/defects", data).then((res) => {});
+  };
+
+  onClickView = (viewRecord) => {
+    console.log("Test Record", viewRecord._id);
+    this.setState({
+      rId: viewRecord._id,
+      viewVisible: true,
+      viewData: viewRecord,
+      defectsName: viewRecord.defectsName,
+      type: viewRecord.type,
+      defectsId: viewRecord.defectsId,
+      status: viewRecord.status,
+      stepToRecreate: viewRecord.stepToRecreate,
+      severity: viewRecord.severity,
+      priority: viewRecord.priority,
+      enteredBy: viewRecord.enteredBy,
+      foundIn: viewRecord.foundIn,
+      availableIn: viewRecord.availableIn,
+      module: viewRecord.module,
+      subModule: viewRecord.subModule,
+      assignTo: viewRecord.assignTo,
+    });
+    this.showModal();
   };
 
   onClickEdit = (record) => {
     console.log("Test Record", record._id);
     this.setState({
-      rId:record._id,
+      rId: record._id,
       visible: true,
       drawerData: record,
       defectsName: record.defectsName,
@@ -162,19 +219,15 @@ export class ViewDefectDetails extends Component {
     <Form layout="vertical" hideRequiredMark>
       <Row gutter={16}>
         <Col span={24}>
-          <Form.Item>
-            <Tag color="#2db7f5"> Defects ID: {record.defectsId} </Tag>
-          </Form.Item>
+          {/* <Form.Item> */}
+            <Text mark style = {{ float:"right", fontSize:"16px" }}> Defects ID: {record.defectsId} </Text>
+          {/* </Form.Item> */}
         </Col>
       </Row>
       <Row gutter={16}>
         <Col span={24}>
           <Form.Item
-            // name="defectsName"
             label="Defect"
-            // value={record.defectsName}
-            // onChange={this.handleChange}
-
             rules={[
               {
                 required: true,
@@ -185,7 +238,6 @@ export class ViewDefectDetails extends Component {
               placeholder="Defect"
               name="defectsName"
               id="defectsName"
-              // value = {record.defectsName}
               value={this.state.defectsName}
               onChange={(event, field) => this.handleChange(event, field)}
             />
@@ -195,18 +247,15 @@ export class ViewDefectDetails extends Component {
       <Row gutter={16}>
         <Col span={24}>
           <Form.Item
-            // name="stepsToRecreate"
             label="Steps To Recreate"
             rules={[
               {
                 required: true,
-                // message: "please enter the steps to recreate",
               },
             ]}
           >
             <Input.TextArea
               name="stepToRecreate"
-              // id="stepToRecreate"
               rows={4}
               placeholder="please enter the steps to recreate"
               value={this.state.stepToRecreate}
@@ -218,7 +267,6 @@ export class ViewDefectDetails extends Component {
       <Row gutter={16}>
         <Col span={12}>
           <Form.Item
-            // name="type"
             label="Type"
             value={this.state.type}
             onChange={this.handleChange}
@@ -238,7 +286,6 @@ export class ViewDefectDetails extends Component {
         </Col>
         <Col span={12}>
           <Form.Item
-            // name="status"
             label="Status"
             rules={[{ required: true, message: "Please choose the status" }]}
           >
@@ -277,20 +324,20 @@ export class ViewDefectDetails extends Component {
                         <Option value="Reject">Reject</Option>
                       </>
                     );
-                    case "Open":
-                      return (
-                        <>
-                          <Option value="Fixed">Fixed</Option>
-                          <Option value="Reject">Reject</Option>
-                        </>
-                      );
-                      case "Reject":
-                        return (
-                          <>
-                            <Option value="Re-open">Re-open</Option>
-                            <Option value="Closed">Closed</Option>
-                          </>
-                        );
+                  case "Open":
+                    return (
+                      <>
+                        <Option value="Fixed">Fixed</Option>
+                        <Option value="Reject">Reject</Option>
+                      </>
+                    );
+                  case "Reject":
+                    return (
+                      <>
+                        <Option value="Re-open">Re-open</Option>
+                        <Option value="Closed">Closed</Option>
+                      </>
+                    );
                 }
               })()}
             </Select>
@@ -300,7 +347,6 @@ export class ViewDefectDetails extends Component {
       <Row gutter={16}>
         <Col span={12}>
           <Form.Item
-            // name="serverity"
             label="Serverity"
             rules={[{ required: true, message: "Please choose the serverity" }]}
           >
@@ -318,7 +364,6 @@ export class ViewDefectDetails extends Component {
         </Col>
         <Col span={12}>
           <Form.Item
-            // name="priority"
             label="Priority"
             rules={[{ required: true, message: "Please choose the priority" }]}
           >
@@ -338,7 +383,6 @@ export class ViewDefectDetails extends Component {
       <Row gutter={16}>
         <Col span={12}>
           <Form.Item
-            // name="enteredBy"
             label="Entered By"
             rules={[
               { required: true, message: "Please choose the entered by" },
@@ -359,7 +403,6 @@ export class ViewDefectDetails extends Component {
         </Col>
         <Col span={12}>
           <Form.Item
-            // name="assignTo"
             label="AssignTo"
             rules={[{ required: true, message: "Please choose the assign to" }]}
           >
@@ -380,7 +423,6 @@ export class ViewDefectDetails extends Component {
       <Row gutter={16}>
         <Col span={12}>
           <Form.Item
-            // name="foundIn"
             label="Found In"
             rules={[{ required: true, message: "Please choose the found in" }]}
           >
@@ -399,7 +441,6 @@ export class ViewDefectDetails extends Component {
         </Col>
         <Col span={12}>
           <Form.Item
-            // name="availableIn"
             label="Available In"
             rules={[
               {
@@ -425,7 +466,6 @@ export class ViewDefectDetails extends Component {
       <Row gutter={16}>
         <Col span={12}>
           <Form.Item
-            // name="foundIn"
             label="Module"
             rules={[{ required: true, message: "Please choose the Module" }]}
           >
@@ -454,7 +494,6 @@ export class ViewDefectDetails extends Component {
           >
             <Select
               placeholder="Please choose the Submodule"
-              // name="availableIn"
               name="submodule"
               value={this.state.subModule}
               onChange={(value) => this.handleSelect("submodule", value)}
@@ -474,7 +513,6 @@ export class ViewDefectDetails extends Component {
     axios
       .get("http://localhost:5000/defects")
       .then((res) => {
-        // console.log(res.data);
         this.setState({
           data: res.data,
         });
@@ -625,9 +663,8 @@ export class ViewDefectDetails extends Component {
       subModule,
     } = this.state;
     // e.preventDefault();
-    const data =
-    {
-      defectsId:defectsId,
+    const data = {
+      defectsId: defectsId,
       defectsName: defectsName,
       type: type,
       stepToRecreate: stepToRecreate,
@@ -648,11 +685,10 @@ export class ViewDefectDetails extends Component {
         console.log(res.data);
         this.setState({
           putData: res.data,
-          visible:false
+          visible: false,
         });
       });
     window.location.reload();
-    openNotificationWithIcon('success');
   };
 
   handleSearch = (selectedKeys, confirm, dataIndex) => {
@@ -669,6 +705,9 @@ export class ViewDefectDetails extends Component {
   };
 
   render() {
+    let { sortedInfo, filteredInfo } = this.state;
+    sortedInfo = sortedInfo || {};
+    filteredInfo = filteredInfo || {};
     const columns = [
       {
         title: "ID",
@@ -678,7 +717,6 @@ export class ViewDefectDetails extends Component {
         sorter: (a, b) => a.defectsId - b.defectsId,
         defaultSortOrder: "descend",
         sortDirections: ["descend", "ascend"],
-        // ...this.getColumnSearchProps("defectId"),
       },
       {
         title: "Defect Description",
@@ -705,24 +743,14 @@ export class ViewDefectDetails extends Component {
           },
         ],
         filterMultiple: false,
-        onFilter: (value, record) => record.type.indexOf(value) === 0,
+        filteredValue: filteredInfo.type || null,
+        onFilter: (value, record) => record.type.includes(value),
       },
       {
         title: "Module",
         dataIndex: "module",
         key: "module",
-        // filters: [
-        //   {
-        //     text: "Module",
-        //     value: "Front End",
-        //   },
-        //   {
-        //     text: "Back End",
-        //     value: "Back End",
-        //   },
-        // ],
         filterMultiple: false,
-        // onFilter: (value, record) => record.module.indexOf(value) === 0,
         ...this.getColumnSearchProps("module"),
       },
       {
@@ -756,7 +784,8 @@ export class ViewDefectDetails extends Component {
           },
         ],
         filterMultiple: false,
-        onFilter: (value, record) => record.status.indexOf(value) === 0,
+        filteredValue: filteredInfo.status || null,
+        onFilter: (value, record) => record.status.includes(value),
         render: (value, record) => {
           switch (record.status) {
             case "New":
@@ -771,7 +800,7 @@ export class ViewDefectDetails extends Component {
               return <Tag color="purple">Re-open</Tag>;
             case "Postpone":
               return <Tag color="cyan">Postpone</Tag>;
-              case "Reject":
+            case "Reject":
               return <Tag color="red">Reject</Tag>;
           }
         },
@@ -795,7 +824,8 @@ export class ViewDefectDetails extends Component {
           },
         ],
         filterMultiple: false,
-        onFilter: (value, record) => record.severity.indexOf(value) === 0,
+        filteredValue: filteredInfo.severity || null,
+        onFilter: (value, record) => record.severity.includes(value),
         render: (value, record) => {
           switch (record.severity) {
             case "High":
@@ -826,7 +856,8 @@ export class ViewDefectDetails extends Component {
           },
         ],
         filterMultiple: false,
-        onFilter: (value, record) => record.priority.indexOf(value) === 0,
+        filteredValue: filteredInfo.priority || null,
+        onFilter: (value, record) => record.priority.includes(value),
         render: (value, record) => {
           switch (record.priority) {
             case "High":
@@ -855,18 +886,25 @@ export class ViewDefectDetails extends Component {
         // dataIndex: "view",
         key: "edit",
         render: (record = this.state.selectedRows) => (
-          <a onClick={() => this.onClickEdit(record)}>Edit</a>
+          <a onClick={() => this.onClickEdit(record)}><EditOutlined /></a>
         ),
       },
+      {
+        title: "View",
+        key:"view",
+        render: (viewRecord = this.state.selectedRows) => (
+          <a onClick = {()=> this.onClickView(viewRecord)}><FolderViewOutlined style = {{color:"red"}}  /></a>
+        )
+      }
     ];
 
     const { drawerData } = this.state;
     return (
       <Fragment>
         <Row gutter={8}>
-          <Col span={9}>
+          <Col span={3}>
             <Button
-              type="primary"
+              type="primary" ghost
               style={{
                 marginBottom: 16,
                 marginTop: 10,
@@ -875,6 +913,12 @@ export class ViewDefectDetails extends Component {
             >
               Add New Defect
             </Button>
+          </Col>
+          <Col span = {6}>
+            <Button danger onClick={this.clearFilters}  style={{
+                marginBottom: 16,
+                marginTop: 10,
+              }}>Clear filters</Button>
           </Col>
           <Col span={3}>
             <Statistic
@@ -924,7 +968,10 @@ export class ViewDefectDetails extends Component {
         </Row>
         <br></br>
         <Table
-         columns={columns} dataSource={this.state.data} />
+          columns={columns}
+          dataSource={this.state.data}
+          onChange={this.filterHandleChange}
+        />
 
         <Drawer
           title="Update Defect Details"
@@ -951,7 +998,19 @@ export class ViewDefectDetails extends Component {
         </Drawer>
         <AddDefectDetailsForm show={this.state.show} data={this.state.data} />
 
-        {/*  */}
+
+        <Modal
+          title="Basic Modal"
+          visible={this.state.viewVisible}
+          onOk={this.handleOk}
+          onCancel={this.handleCancel}
+        >
+          <p>Some contents...</p>
+          <p>Some contents...</p>
+          <p>Some contents...</p>
+        </Modal>
+
+
       </Fragment>
     );
   }
