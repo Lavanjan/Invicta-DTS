@@ -1,9 +1,12 @@
 const mongoose = require('mongoose');
+autoIncrement = require('mongoose-auto-increment');
+var connection = mongoose.createConnection("mongodb+srv://lavanjan:lavan1998@invicta-dts.euh5l.mongodb.net/<dbname>?retryWrites=true&w=majority");
+autoIncrement.initialize(connection);
 
 const Schema = mongoose.Schema;
 
 const defectsSchema = new Schema({
-    defectsId: { type: String, required: true },
+    defectsId: { type: Number},
     defectsName: { type: String, required: true },
     stepToRecreate: { type: String, required: true },
     type: { type: String, required: true },
@@ -18,6 +21,12 @@ const defectsSchema = new Schema({
     subModule: { type: String, required: true }
 },{
     timestamps:true,
+});
+defectsSchema.plugin(autoIncrement.plugin, {
+    model: 'defects',
+    field: 'defectsId',
+    incrementBy: 1,
+    startAt: 1
 });
 
 const defects = mongoose.model('defects', defectsSchema);

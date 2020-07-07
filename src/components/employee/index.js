@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import {fetchemployee,addemployee} from '../../components/redux/action/ActionEmployee';
 import ViewEmployee from '../employee/ViewEmployee'
 import AddEmployeeForm from '../employee/AddEmployeeForm'
+import { message,notification} from 'antd';
 
 export class employee extends Component {
     componentWillMount(){
@@ -12,14 +13,22 @@ export class employee extends Component {
     componentWillReceiveProps(nextProps) {
         if (nextProps.msg) {
           alert(nextProps.msg)
+          this.messageShow('success')
         }
-        
+    
       } 
-    render() {
+      messageShow = (type)=>{
+        notification[type]({
+          message: 'Notification Title',
+          description:
+            'This is the content of the notification. This is the content of the notification. This is the content of the notification.',
+        });
+      } 
+    render() { 
         return (
             <div>
                 <ViewEmployee employees={this.props.employees} />
-                <AddEmployeeForm addemployee={this.props.addemployee}/>
+                <AddEmployeeForm addemployee={this.props.addemployee} message={this.props.messageShow}/>
             </div>
         )
     }

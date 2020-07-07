@@ -7,15 +7,15 @@ router.route('/').get((req, res) => {
     .catch(err => res.status(400).json('Error: ' + err));
 });
 
-router.route('/add').post((req, res) => {
-  const employeeId = req.body.employeeId;
+router.route('/add').post((req, res) => {  
+   const employeeId=req.body.employeeId;
   const employeeName = req.body.employeeName;
   const employeeEmail = req.body.employeeEmail;
   const employeeMobileNumber = req.body.employeeMobileNumber;
   const employeeDepartment = req.body.employeeDepartment;
 
-  const newEmployees = new employees({
-    employeeId,
+  const newEmployees = new employees({  
+    employeeId,  
     employeeName,
     employeeEmail,
     employeeMobileNumber,
@@ -41,8 +41,7 @@ router.route('/:id').delete((req, res)=>{
 
 router.route('/update/:id').put((req, res) => {
     employees.findById(req.params.id)
-    .then(employees => {
-        employees.employeeId = req.body.employeeId;
+    .then(employees => {        
         employees.employeeName = req.body.employeeName;
         employees.employeeEmail = req.body.employeeEmail;
         employees.employeeMobileNumber = req.body.employeeMobileNumber;

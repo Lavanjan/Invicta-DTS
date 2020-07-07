@@ -7,6 +7,7 @@ import { adddefect } from '../redux/action/ActionDefect';
 const { Option } = Select;
 const { TextArea } = Input;
 const { Text} = Typography;
+
 export class AddDefectDetailsForm extends Component {
     formRef = React.createRef();
 
@@ -20,8 +21,7 @@ export class AddDefectDetailsForm extends Component {
         else if (nextProps.show) {
             this.setState({
                 show: true
-            })
-            
+            })           
 
         }
     }
@@ -29,7 +29,6 @@ export class AddDefectDetailsForm extends Component {
         show: false,
         defects: {},
         err: 'err',        
-        count: 1,
         defect: '',
         stepToRecreate: '',
         type: '',
@@ -89,12 +88,10 @@ export class AddDefectDetailsForm extends Component {
             subModule: value
         })
     }
-
-    handleSubmit = (event) => {
-        const Id =(this.props.data.length + this.state.count)
+    
+    handleSubmit = (event) => {        
         this.setState({
-            defects: {
-                defectsId: Id,
+            defects: {                
                 defectsName: this.state.defect,
                 stepToRecreate: this.state.stepToRecreate,
                 type: this.state.type,
@@ -111,14 +108,10 @@ export class AddDefectDetailsForm extends Component {
         })
         this.props.adddefect(this.state.defects)
         this.formRef.current.resetFields();
-        window.location.reload();   
+        window.location.reload();         
 
     }
-    // onClick=()=>{
-    //     console.log(this.props.data.length)
-    // }
-
-
+    
     render() {
         return (
             <div>
@@ -136,7 +129,7 @@ export class AddDefectDetailsForm extends Component {
                             <Col span={12}>
                                 <Form.Item>
                                     <Text style={{ fontSize: 15, color: "black"}}>Defect ID : </Text>
-                                    <Tag color="#2db7f5" name="defectId" style={{ fontSize: 15,color: "black" }}>{this.props.data.length + this.state.count}</Tag>
+                                    <Tag color="#2db7f5" name="defectId" style={{ fontSize: 15,color: "black" }}>{this.props.data.length+1}</Tag>
                                 </Form.Item>
                             </Col>
                             <Col span={12}>
