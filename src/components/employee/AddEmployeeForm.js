@@ -1,15 +1,7 @@
 import React, { Component } from 'react'
-import { Form, Input, InputNumber, Button } from 'antd';
+import { Drawer, Form, Col, Row, Select, Tag, Input, Button, Typography,message } from "antd";
 import { employee } from '.';
 
-const layout = {
-    labelCol: {
-        span: 8,
-    },
-    wrapperCol: {
-        span: 16,
-    },
-};
 const validateMessages = {
     required: '${label} is required!',
     types: {
@@ -22,12 +14,36 @@ const validateMessages = {
 };
 
 export class AddEmployeeForm extends Component {
-    state={        
-        name:'',
-        email:'',
-        number:'',
-        department:'',
-        employee:''
+    formRef = React.createRef();
+
+    componentWillReceiveProps(nextProps) {
+
+        if (nextProps.msg) {
+            message.loading('Action in progress..')
+                .then(() => message.success(nextProps.msg))
+                .then(() => {
+                    this.setState({
+                        show: false
+                    })
+                }).then(() => {
+                    window.location.reload()
+                })
+        }
+
+        else if (nextProps.show) {
+            this.setState({
+                show: true
+            })
+
+
+        }
+    }
+    state = {
+        name: '',
+        email: '',
+        number: '',
+        department: '',
+        employee: ''
     }
 
     handleChange = (event) => {
@@ -36,79 +52,113 @@ export class AddEmployeeForm extends Component {
 
         });
     }
-    onFinish= (event) => {        
-        
-           const employee={                
-                employeeName:this.state.name,
-                employeeEmail:this.state.email,
-                employeeMobileNumber:this.state.email,
-                employeeDepartment:this.state.department
-            }
-    
-        this.props.addemployee(employee); 
+    onFinish = (event) => {
+
+        const employee = {
+            employeeName: this.state.name,
+            employeeEmail: this.state.email,
+            employeeMobileNumber: this.state.email,
+            employeeDepartment: this.state.department
+        }
+
+        this.props.addemployee(employee);
         this.props.messageShow('success');
-        
-        
+
+
     }
+
+    onClose = () => {
+        this.setState({
+            show: false
+        })
+        window.location.reload();
+    };
     render() {
         return (
             <div>
-                <Form {...layout} name="nest-messages" onFinish={this.onFinish} validateMessages={validateMessages}>
-                    <Form.Item
-                        name="Name"
-                        label="Name"
-                        onChange={this.handleChange}
-                        rules={[
-                            {
-                                required: true,
-                            },
-                        ]}
-                    >
-                        <Input name="name"/>
-                    </Form.Item>
-                    <Form.Item
-                        name="Email"
-                        onChange={this.handleChange}
-                        label="Email"
-                        rules={[
-                            {
-                                required:true
-                            },
-                        ]}
-                    >
-                        <Input name="email"/>
-                    </Form.Item>
-                    <Form.Item
-                        name="Number"
-                        onChange={this.handleChange}
-                        label="Number"
-                        rules={[
-                            {
-                                required:true
-                            },
-                        ]}
-                    >
-                        <Input name="number"/>
-                    </Form.Item>
-                    <Form.Item
-                        name="Department"
-                        onChange={this.handleChange}
-                        label="Department"
-                        rules={[
-                            {
-                                required:true
-                            },
-                        ]}
-                    >
-                        <Input name="department"/>
-                    </Form.Item>                   
-                    
-                    <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>
-                        <Button type="primary" htmlType="submit">
-                            Submit
+                <Drawer
+                    title="Add Defct Details"
+                    width={720}
+                    onClose={this.onClose}
+                    visible={this.state.show}
+                    placement='left'
+
+                >
+                    <Form layout="vertical" hideRequiredMark name="nest-messages" onFinish={this.onFinish} validateMessages={validateMessages}>
+                    <Row gutter={16}>
+                            <Col span={24}>
+                        <Form.Item
+                            name="Name"
+                            label="Name"
+                            onChange={this.handleChange}
+                            rules={[
+                                {
+                                    required: true,
+                                },
+                            ]}
+                        >
+                            <Input name="name" />
+                        </Form.Item>
+                        </Col>
+                        </Row>
+                        <Row gutter={16}>
+                            <Col span={24}>
+                        <Form.Item
+                            name="Email"
+                            onChange={this.handleChange}
+                            label="Email"
+                            rules={[
+                                {
+                                    required: true
+                                },
+                            ]}
+                        >
+                            <Input name="email" />
+                        </Form.Item>
+                        </Col></Row>
+                        <Row gutter={16}>
+                            <Col span={24}>
+                        <Form.Item
+                            name="Number"
+                            onChange={this.handleChange}
+                            label="Number"
+                            rules={[
+                                {
+                                    required: true
+                                },
+                            ]}
+                        >
+                            <Input name="number" />
+                        </Form.Item>
+                        </Col>
+                        </Row>
+                        <Row gutter={16}>
+                            <Col span={24}>
+                        <Form.Item
+                            name="Department"
+                            onChange={this.handleChange}
+                            label="Department"
+                            rules={[
+                                {
+                                    required: true
+                                },
+                            ]}
+                        >
+                            <Input name="department" />
+                        </Form.Item>
+                            </Col>                            
+                            </Row>
+                            <Row gutter={16}>
+                            <Col span={24}>
+                        <Form.Item >
+                            <Button type="primary" htmlType="submit">
+                                Submit
                         </Button>
-                    </Form.Item>
-                </Form>
+                        </Form.Item>
+                        </Col>
+                        </Row>
+                    </Form>
+                </Drawer>
             </div>
         )
     }

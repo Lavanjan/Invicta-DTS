@@ -15,7 +15,7 @@ export class ViewEmployee extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {
+    this.state = { 
       searchText: "",
       searchedColumn: "",
       visible: false,
@@ -105,8 +105,8 @@ export class ViewEmployee extends Component {
     const columns = [
       {
         title: "Employee ID",
-        dataIndex: "_id",
-        key: "_id",
+        dataIndex: "employeeId",
+        key: "employeeId",
         ...this.getColumnSearchProps("Id"),
       },
       {
@@ -137,19 +137,8 @@ export class ViewEmployee extends Component {
     
     return (
       <Fragment>
-        <div>
-          
-            <Button
-              type="primary"
-              style={{
-                marginBottom: 16,
-              }}
-              onClick={this.clickButton}
-           
-            >
-              Add New Employee
-            </Button>
-            
+        <div>    
+    
           <Table columns={columns} dataSource={this.props.employees} />
         </div>        
       </Fragment>
