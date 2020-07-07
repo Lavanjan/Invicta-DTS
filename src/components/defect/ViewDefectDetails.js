@@ -1,6 +1,16 @@
 import React, { Component, Fragment } from "react";
 import { Link } from "react-router-dom";
-import { Table, Input, Button, Space, Tag, Badge, notification, Modal } from "antd";
+import {
+  Table,
+  Input,
+  Button,
+  Space,
+  Tag,
+  Badge,
+  notification,
+  Modal,
+  Descriptions,
+} from "antd";
 import Highlighter from "react-highlight-words";
 import {
   SearchOutlined,
@@ -10,7 +20,7 @@ import {
   BugOutlined,
   EditOutlined,
   RadarChartOutlined,
-  FolderViewOutlined
+  FolderViewOutlined,
 } from "@ant-design/icons";
 import "antd/dist/antd.css";
 import { Drawer, Form, Col, Row, Select, Typography, Statistic } from "antd";
@@ -65,7 +75,7 @@ export class ViewDefectDetails extends Component {
       show: false,
       drawerData: {},
       totalHigher: "",
-      viewVisible: false
+      viewVisible: false,
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -82,14 +92,14 @@ export class ViewDefectDetails extends Component {
       viewVisible: true,
     });
   };
-  handleOk = e => {
+  handleOk = (e) => {
     console.log(e);
     this.setState({
       viewVisible: false,
     });
   };
 
-  handleCancel = e => {
+  handleCancel = (e) => {
     console.log(e);
     this.setState({
       viewVisible: false,
@@ -220,7 +230,10 @@ export class ViewDefectDetails extends Component {
       <Row gutter={16}>
         <Col span={24}>
           {/* <Form.Item> */}
-            <Text mark style = {{ float:"right", fontSize:"16px" }}> Defects ID: {record.defectsId} </Text>
+          <Text mark style={{ float: "right", fontSize: "16px" }}>
+            {" "}
+            Defects ID: {record.defectsId}{" "}
+          </Text>
           {/* </Form.Item> */}
         </Col>
       </Row>
@@ -886,16 +899,20 @@ export class ViewDefectDetails extends Component {
         // dataIndex: "view",
         key: "edit",
         render: (record = this.state.selectedRows) => (
-          <a onClick={() => this.onClickEdit(record)}><EditOutlined /></a>
+          <a onClick={() => this.onClickEdit(record)}>
+            <EditOutlined />
+          </a>
         ),
       },
       {
         title: "View",
-        key:"view",
+        key: "view",
         render: (viewRecord = this.state.selectedRows) => (
-          <a onClick = {()=> this.onClickView(viewRecord)}><FolderViewOutlined style = {{color:"red"}}  /></a>
-        )
-      }
+          <a onClick={() => this.onClickView(viewRecord)}>
+            <FolderViewOutlined style={{ color: "red" }} />
+          </a>
+        ),
+      },
     ];
 
     const { drawerData } = this.state;
@@ -904,7 +921,8 @@ export class ViewDefectDetails extends Component {
         <Row gutter={8}>
           <Col span={3}>
             <Button
-              type="primary" ghost
+              type="primary"
+              ghost
               style={{
                 marginBottom: 16,
                 marginTop: 10,
@@ -914,11 +932,17 @@ export class ViewDefectDetails extends Component {
               Add New Defect
             </Button>
           </Col>
-          <Col span = {6}>
-            <Button danger onClick={this.clearFilters}  style={{
+          <Col span={6}>
+            <Button
+              danger
+              onClick={this.clearFilters}
+              style={{
                 marginBottom: 16,
                 marginTop: 10,
-              }}>Clear filters</Button>
+              }}
+            >
+              Clear filters
+            </Button>
           </Col>
           <Col span={3}>
             <Statistic
@@ -998,19 +1022,56 @@ export class ViewDefectDetails extends Component {
         </Drawer>
         <AddDefectDetailsForm show={this.state.show} data={this.state.data} />
 
-
         <Modal
-          title="Basic Modal"
+          footer ={[
+            
+          ]}
+          style = {{ top: 40 }}
+          width="90%"
+          title="Defect Brief Details"
           visible={this.state.viewVisible}
           onOk={this.handleOk}
           onCancel={this.handleCancel}
         >
-          <p>Some contents...</p>
-          <p>Some contents...</p>
-          <p>Some contents...</p>
+          <Descriptions column={5} layout="vertical" bordered>
+            <Descriptions.Item label="Defect Description" span={5}>
+              {this.state.defectsName}
+            </Descriptions.Item>
+            <Descriptions.Item label="Steps to Recreate" span={5}>
+              {this.state.stepToRecreate}
+            </Descriptions.Item>
+            <Descriptions.Item label="Status">
+              {this.state.status}
+            </Descriptions.Item>
+            <Descriptions.Item label="Type">
+              {this.state.type}
+            </Descriptions.Item>
+            <Descriptions.Item label="Module">
+              {this.state.module}
+            </Descriptions.Item>
+            <Descriptions.Item label="SubModule">
+              {this.state.subModule}
+            </Descriptions.Item>
+            <Descriptions.Item label="Serverity">
+              {this.state.severity}
+            </Descriptions.Item>
+            <Descriptions.Item label="Priority">
+              {this.state.priority}
+            </Descriptions.Item>
+            <Descriptions.Item label="Entered By">
+              {this.state.enteredBy}
+            </Descriptions.Item>
+            <Descriptions.Item label="Assign To">
+              {this.state.assignTo}
+            </Descriptions.Item>
+            <Descriptions.Item label="Found In">
+              {this.state.foundIn}
+            </Descriptions.Item>
+            <Descriptions.Item label="Available In">
+              {this.state.availableIn}
+            </Descriptions.Item>
+          </Descriptions>
         </Modal>
-
-
       </Fragment>
     );
   }
