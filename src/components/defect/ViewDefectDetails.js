@@ -916,21 +916,21 @@ export class ViewDefectDetails extends Component {
         ...this.getColumnSearchProps("assignTo"),
       },
       {
+        title: "View",
+        key: "view",
+        render: (viewRecord = this.state.selectedRows) => (
+          <a onClick={() => this.onClickView(viewRecord)}>
+            <FolderViewOutlined style={{ color: "magenta", textAlign:"center", fontSize: 16 }} />
+          </a>
+        ),
+      },
+      {
         title: "Edit",
         // dataIndex: "view",
         key: "edit",
         render: (record = this.state.selectedRows) => (
           <a onClick={() => this.onClickEdit(record)}>
-            <EditOutlined />
-          </a>
-        ),
-      },
-      {
-        title: "View",
-        key: "view",
-        render: (viewRecord = this.state.selectedRows) => (
-          <a onClick={() => this.onClickView(viewRecord)}>
-            <FolderViewOutlined style={{ color: "red" }} />
+            <EditOutlined style={{ fontSize: 16 }} />
           </a>
         ),
       },
@@ -938,7 +938,83 @@ export class ViewDefectDetails extends Component {
 
     const { drawerData } = this.state;
     return (
+<<<<<<< HEAD
       <Fragment>        
+=======
+      <Fragment>
+        <Row gutter={8}>
+          <Col span={3}>
+            <Button
+              type="primary"
+              ghost
+              style={{
+                marginBottom: 16,
+                marginTop: 10,
+              }}
+              onClick={this.showDrawerDefectform}
+            >
+              Add New Defect
+            </Button>
+          </Col>
+          <Col span={6}>
+            <Button
+              danger
+              onClick={this.clearFilters}
+              style={{
+                marginBottom: 16,
+                marginTop: 10,
+              }}
+            >
+              Clear filters
+            </Button>
+          </Col>
+          <Col span={3}>
+            <Statistic
+              title="High Severity"
+              style={{ textAlign: "center" }}
+              value={this.state.high}
+              valueStyle={{ color: "red", textAlign: "center" }}
+              prefix={<RiseOutlined />}
+            ></Statistic>
+          </Col>
+          <Col span={3}>
+            <Statistic
+              title="Medium Severity"
+              style={{ textAlign: "center" }}
+              value={this.state.medium}
+              valueStyle={{ color: "orange", textAlign: "center" }}
+              prefix={<StockOutlined />}
+            ></Statistic>
+          </Col>
+          <Col span={3}>
+            <Statistic
+              title="Low Severity"
+              style={{ textAlign: "center" }}
+              value={this.state.low}
+              valueStyle={{ color: "green", textAlign: "center" }}
+              prefix={<FallOutlined />}
+            ></Statistic>
+          </Col>
+          <Col span={3}>
+            <Statistic
+              title="New Defects"
+              style={{ textAlign: "center" }}
+              value={this.state.newdef}
+              valueStyle={{ color: "blue", textAlign: "center" }}
+              prefix={<RadarChartOutlined />}
+            ></Statistic>
+          </Col>
+          <Col span={3}>
+            <Statistic
+              title="Total Defects"
+              style={{ textAlign: "center" }}
+              value={this.state.data.length}
+              valueStyle={{ color: "#006d75", textAlign: "center" }}
+              prefix={<BugOutlined />}
+            ></Statistic>
+          </Col>
+        </Row>
+>>>>>>> fd661ea9284221293c9b05b3252f152b618ed3b2
         <br></br>
         <Table
           columns={columns}
@@ -973,10 +1049,16 @@ export class ViewDefectDetails extends Component {
         
 
         <Modal
+<<<<<<< HEAD
           footer ={[
              
           ]}
           style = {{ top: 40 }}
+=======
+        style = {{borderRadius:"10px"}}
+          footer={[]}
+          style={{ top: 40 }}
+>>>>>>> fd661ea9284221293c9b05b3252f152b618ed3b2
           width="90%"
           title="Defect Brief Details"
           visible={this.state.viewVisible}

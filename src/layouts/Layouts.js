@@ -54,9 +54,9 @@ export class Layouts extends Component {
       <div>
         <Layout className="layout">
           <Header>
-            <Link to="/">
+            <Link to="/home">
               <div className="logo" />
-            <HomeOutlined style={{ fontSize: "25px", color:'white', marginTop:20}} />
+            <HomeOutlined style={{ fontSize: "30px", color:'white', marginTop:18}} />
             </Link>
             <div className="sub">
               <Dropdown overlay={menu}>
