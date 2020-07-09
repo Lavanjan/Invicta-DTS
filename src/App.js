@@ -10,7 +10,7 @@ function App() {
   return (
     <Fragment>
       <Route exact path = "/" component = {SignInForm} />
-      
+  
         {/* <Layout /> */}
     <Route exact path = "/home" component = { Layout } />
     </Fragment>
