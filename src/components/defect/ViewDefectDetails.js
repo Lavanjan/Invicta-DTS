@@ -895,21 +895,21 @@ export class ViewDefectDetails extends Component {
         ...this.getColumnSearchProps("assignTo"),
       },
       {
+        title: "View",
+        key: "view",
+        render: (viewRecord = this.state.selectedRows) => (
+          <a onClick={() => this.onClickView(viewRecord)}>
+            <FolderViewOutlined style={{ color: "magenta", textAlign:"center", fontSize: 16 }} />
+          </a>
+        ),
+      },
+      {
         title: "Edit",
         // dataIndex: "view",
         key: "edit",
         render: (record = this.state.selectedRows) => (
           <a onClick={() => this.onClickEdit(record)}>
-            <EditOutlined />
-          </a>
-        ),
-      },
-      {
-        title: "View",
-        key: "view",
-        render: (viewRecord = this.state.selectedRows) => (
-          <a onClick={() => this.onClickView(viewRecord)}>
-            <FolderViewOutlined style={{ color: "red" }} />
+            <EditOutlined style={{ fontSize: 16 }} />
           </a>
         ),
       },
@@ -985,7 +985,7 @@ export class ViewDefectDetails extends Component {
               title="Total Defects"
               style={{ textAlign: "center" }}
               value={this.state.data.length}
-              valueStyle={{ color: "magenta", textAlign: "center" }}
+              valueStyle={{ color: "#006d75", textAlign: "center" }}
               prefix={<BugOutlined />}
             ></Statistic>
           </Col>
@@ -1023,10 +1023,9 @@ export class ViewDefectDetails extends Component {
         <AddDefectDetailsForm show={this.state.show} data={this.state.data} />
 
         <Modal
-          footer ={[
-            
-          ]}
-          style = {{ top: 40 }}
+        style = {{borderRadius:"10px"}}
+          footer={[]}
+          style={{ top: 40 }}
           width="90%"
           title="Defect Brief Details"
           visible={this.state.viewVisible}

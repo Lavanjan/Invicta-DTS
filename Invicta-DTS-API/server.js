@@ -24,10 +24,12 @@ connection.once('open', ()=>{
 const defectsRouter = require('./routes/defects');
 const employeesRouter = require('./routes/employees');
 const projectsRouter = require('./routes/projects');
+const userAuthRouter = require('./routes/user');
 
 app.use('/defects', defectsRouter);
 app.use('/employees', employeesRouter);
 app.use('/projects', projectsRouter);
+app.use('/user', userAuthRouter);
 
 
 app.listen(port, ()=> {

@@ -9,6 +9,7 @@ import ManageProjects from './../addNewProjects/ManageProject';
 
 import Employee from  './../employee/index'
 import AddEmployeeForm from './../employee/AddEmployeeForm'
+import SignInForm from './../authentication/SignIn';
 
 
 
@@ -16,7 +17,7 @@ export class body extends Component {
     render() {
         return (
             <div>
-                <Route exact path = "/" component = { ViewDefectDetails } />
+                <Route exact path = "/home" component = { ViewDefectDetails } />
                 <Route path = "/add-defect" component = { AddDefectDetailsForm } />
                 <Route path = "/employee-allocation" component = { EmployeeAllocation } />                
                 <Route path="/add-projects" component={AddNewProjects} />
@@ -24,6 +25,7 @@ export class body extends Component {
                 <Route path="/employee" component={Employee} />
                 <Route path="/add-employee" component={AddEmployeeForm} />
                 <Route path="/view-employee" component={ViewDefectDetails} />
+                {/* <Route path="/sign-in" component = {SignInForm} /> */}
             </div>
         )
     }
