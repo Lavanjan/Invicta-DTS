@@ -1,4 +1,4 @@
-import {ADD_EMPLOYEE,FETCH_EMPLOYEE,UPDATE_EMPLOYEE} from './../type/TypesEmployee'
+import {ADD_EMPLOYEE,FETCH_EMPLOYEE,UPDATE_EMPLOYEE,VIEW_DRAWER} from './../type/TypesEmployee'
 import axios from 'axios';
 
 export const fetchemployee = () => dispatch => {
@@ -30,3 +30,4 @@ export const fetchemployee = () => dispatch => {
       );
   }; 
 
+  export const viewDrawer 

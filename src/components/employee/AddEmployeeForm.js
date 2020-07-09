@@ -16,29 +16,17 @@ const validateMessages = {
 export class AddEmployeeForm extends Component {
     formRef = React.createRef();
 
-    componentWillReceiveProps(nextProps) {
+    componentWillReceiveProps(nextProps) {       
 
-        if (nextProps.msg) {
-            message.loading('Action in progress..')
-                .then(() => message.success(nextProps.msg))
-                .then(() => {
-                    this.setState({
-                        show: false
-                    })
-                }).then(() => {
-                    window.location.reload()
-                })
-        }
-
-        else if (nextProps.show) {
+        if (nextProps.show) {
             this.setState({
                 show: true
-            })
-
-
+            })            
         }
     }
     state = {
+        show:false,
+        id:'',
         name: '',
         email: '',
         number: '',
@@ -55,24 +43,27 @@ export class AddEmployeeForm extends Component {
     onFinish = (event) => {
 
         const employee = {
+            employeeId: this.props.employees.length+1,
             employeeName: this.state.name,
             employeeEmail: this.state.email,
-            employeeMobileNumber: this.state.email,
+            employeeMobileNumber: this.state.number,
             employeeDepartment: this.state.department
         }
 
         this.props.addemployee(employee);
-        this.props.messageShow('success');
+        this.formRef.current.resetFields();
+        this.setState({
+            show: false
+        })         
 
 
     }
-
     onClose = () => {
         this.setState({
             show: false
-        })
-        window.location.reload();
+        })        
     };
+
     render() {
         return (
             <div>

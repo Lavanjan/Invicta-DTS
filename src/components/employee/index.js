@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import {fetchemployee,addemployee} from '../../components/redux/action/ActionEmployee';
 import ViewEmployee from '../employee/ViewEmployee'
 import AddEmployeeForm from '../employee/AddEmployeeForm'
+import UpdateEmployeeForm from '../employee/UpdateEmployeeForm'
 import { message,notification,Button} from 'antd';
 
 export class employee extends Component {
@@ -17,12 +18,16 @@ export class employee extends Component {
     }
       
     componentWillReceiveProps(nextProps) {
-        if (nextProps.msg) {
-          alert(nextProps.msg)
-          this.messageShow('success')
-        }
-    
-      } 
+
+      if (nextProps.msg) {
+          message.loading('Action in progress..')
+              .then(() => message.success(nextProps.msg))
+              .then(() => {
+                  window.location.reload();
+              })              
+      }
+
+  }
       messageShow = (type)=>{
         notification[type]({
           message: 'Notification Title',
@@ -49,7 +54,9 @@ export class employee extends Component {
               Add New Employee
             </Button>
                 <ViewEmployee employees={this.props.employees} />
-                <AddEmployeeForm addemployee={this.props.addemployee} message={this.props.messageShow} show={this.state.show} />
+                <AddEmployeeForm addemployee={this.props.addemployee} message={this.props.messageShow} show={this.state.show} employees={this.props.employees} />
+                {/* <UpdateEmployeeForm /> */}
+                <UpdateEmployeeForm />
             </div>
         )
     }

@@ -1,10 +1,6 @@
 import React, { Component } from 'react'
 import { Drawer, Form, Col, Row, Select, Tag, Input, Button, Typography } from "antd";
 import { PlusCircleOutlined, ClearOutlined } from '@ant-design/icons';
-import { connect } from 'react-redux';
-import { message } from 'antd';
-import { withRouter } from "react-router-dom";
-import { adddefect } from '../redux/action/ActionDefect';
 const { Option } = Select;
 const { TextArea } = Input;
 const { Text } = Typography;
@@ -13,27 +9,29 @@ export class AddDefectDetailsForm extends Component {
     formRef = React.createRef();
 
     componentWillReceiveProps(nextProps) {
-
-        if (nextProps.msg) {
-            message.loading('Action in progress..')
-                .then(() => message.success(nextProps.msg))
-                .then(() => {
-                    this.setState({
-                        show: false
-                    })
-                }).then(()=>{
-                    window.location.reload()
-                })
-        }
-
-       else if (nextProps.show) {
+       
+        if (nextProps.show) {
             this.setState({
-                show: true
+                show: nextProps.show
             })
-            
-
         }
     }
+    // componentDidUpdate(prevProps){
+    //     this.setState({
+    //         show:prevProps.show
+    //     })
+    // }
+
+    // static getDerivedStateFromProps(props, state) {
+    //     alert("derived");
+    //     if (props.show !== state.show) {
+    //       return {
+    //         show:props.show
+    //       };
+    //     }
+    //     return null;
+    //   }
+
     state = {
         show: false,
         defects: {},
@@ -53,10 +51,13 @@ export class AddDefectDetailsForm extends Component {
     }
 
     onClose = () => {
+
         this.setState({
             show: false
         })
-        window.location.reload();
+
+
+
     };
 
     handleChange = (event) => {
@@ -115,12 +116,10 @@ export class AddDefectDetailsForm extends Component {
                 availableIn: this.state.availableIn
             }
         })
-        this.props.adddefect(this.state.defects)
-        this.formRef.current.resetFields();
-        // window.location.reload();
-
-
-
+        this.props.adddefect(this.state.defects)               
+        
+        this.formRef.current.resetFields();        
+        // window.location.reload();        
     }
 
     render() {
@@ -140,7 +139,7 @@ export class AddDefectDetailsForm extends Component {
                             <Col span={12}>
                                 <Form.Item>
                                     <Text mark style={{ fontSize: 15, color: "black" }}>Defect ID : </Text>
-                                    <Text mark  name="defectId" style={{ fontSize: 15, color: "black" }}>{this.props.data.length + 1}</Text>
+                                    <Text mark name="defectId" style={{ fontSize: 15, color: "black" }}>{this.props.data.length+1}</Text>
                                 </Form.Item>
                             </Col>
                             <Col span={12}>
@@ -359,15 +358,5 @@ export class AddDefectDetailsForm extends Component {
         )
     }
 }
-const mapStateToProps = state => ({
-    defect: state.ReducerDefect.defect,
-    msg: state.ReducerDefect.msg
-});
 
-const mapDispatchToProps = (dispatch, ownProps) => {
-    return {
-        adddefect: (defect) => { dispatch(adddefect(defect)) },
-
-    }
-}
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(AddDefectDetailsForm))
+export default AddDefectDetailsForm

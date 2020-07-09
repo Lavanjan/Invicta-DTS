@@ -10,6 +10,7 @@ import {
   notification,
   Modal,
   Descriptions,
+  message
 } from "antd";
 import Highlighter from "react-highlight-words";
 import {
@@ -25,8 +26,6 @@ import {
 import "antd/dist/antd.css";
 import { Drawer, Form, Col, Row, Select, Typography, Statistic } from "antd";
 import axios from "axios";
-import AddDefectDetailsForm from "./AddDefectDetailsForm";
-
 const { Text } = Typography;
 const { Option } = Select;
 const { TextArea } = Input;
@@ -72,6 +71,7 @@ export class ViewDefectDetails extends Component {
       visible: false,
       data: [],
       loading: false,
+      load:true,
       show: false,
       drawerData: {},
       totalHigher: "",
@@ -557,11 +557,33 @@ export class ViewDefectDetails extends Component {
               break;
           }
         }
-      });
+      }).then(()=>{
+        this.sendData();
+        
+      }).then(()=>{
+        this.setState({
+          load:false
+        })
+      })
+      
+  }
+  sendData = () => {
+    const source ={
+      low:this.state.low, 
+      high:this.state.high,
+      medium:this.state.medium,
+      data:this.state.data,
+      newdef:this.state.newdef,
+      data:this.state.data
+
+    }
+    this.props.getdata(source);    
   }
   componentDidMount() {
     this.getAll();
+    
   }
+
   onClick = () => {
     for (let i = 0; i < this.state.data.length; i++) {
       switch (this.state.data[i].severity) {
@@ -581,11 +603,6 @@ export class ViewDefectDetails extends Component {
     }
   };
 
-  showDrawerDefectform = () => {
-    this.setState({
-      show: true,
-    });
-  };
 
   onClose = () => {
     this.setState({
@@ -700,8 +717,12 @@ export class ViewDefectDetails extends Component {
           putData: res.data,
           visible: false,
         });
-      });
-    window.location.reload();
+      })
+      message.loading('Action in progress..')
+      .then(() => message.success("Update Successfully"))
+      .then(()=>{
+        window.location.reload();
+      })  
   };
 
   handleSearch = (selectedKeys, confirm, dataIndex) => {
@@ -802,19 +823,19 @@ export class ViewDefectDetails extends Component {
         render: (value, record) => {
           switch (record.status) {
             case "New":
-              return <Tag color="geekblue">New</Tag>;
+              return <Tag style={{fontWeight:"bolder"}}color="#1890ff">New</Tag>;
             case "Open":
-              return <Tag color="orange">Open</Tag>;
+              return <Tag style={{fontWeight:"bolder"}}color="#9e1068">Open</Tag>;
             case "Fixed":
-              return <Tag color="green">Fixed</Tag>;
+              return <Tag style={{fontWeight:"bolder"}}color="#7cb305">Fixed</Tag>;
             case "Closed":
-              return <Tag color="lime">Closed</Tag>;
+              return <Tag style={{fontWeight:"bolder"}} color="#ad8b00">Closed</Tag>;
             case "Re-open":
-              return <Tag color="purple">Re-open</Tag>;
+              return <Tag style={{fontWeight:"bolder"}} color="#9254de">Re-open</Tag>;
             case "Postpone":
-              return <Tag color="cyan">Postpone</Tag>;
+              return <Tag style={{fontWeight:"bolder"}} color="#00474f">Postpone</Tag>;
             case "Reject":
-              return <Tag color="red">Reject</Tag>;
+              return <Tag  style={{fontWeight:"bolder"}}color="#ff4d4f">Reject</Tag>;
           }
         },
       },
@@ -917,84 +938,13 @@ export class ViewDefectDetails extends Component {
 
     const { drawerData } = this.state;
     return (
-      <Fragment>
-        <Row gutter={8}>
-          <Col span={3}>
-            <Button
-              type="primary"
-              ghost
-              style={{
-                marginBottom: 16,
-                marginTop: 10,
-              }}
-              onClick={this.showDrawerDefectform}
-            >
-              Add New Defect
-            </Button>
-          </Col>
-          <Col span={6}>
-            <Button
-              danger
-              onClick={this.clearFilters}
-              style={{
-                marginBottom: 16,
-                marginTop: 10,
-              }}
-            >
-              Clear filters
-            </Button>
-          </Col>
-          <Col span={3}>
-            <Statistic
-              title="High Severity"
-              style={{ textAlign: "center" }}
-              value={this.state.high}
-              valueStyle={{ color: "red", textAlign: "center" }}
-              prefix={<RiseOutlined />}
-            ></Statistic>
-          </Col>
-          <Col span={3}>
-            <Statistic
-              title="Medium Severity"
-              style={{ textAlign: "center" }}
-              value={this.state.medium}
-              valueStyle={{ color: "orange", textAlign: "center" }}
-              prefix={<StockOutlined />}
-            ></Statistic>
-          </Col>
-          <Col span={3}>
-            <Statistic
-              title="Low Severity"
-              style={{ textAlign: "center" }}
-              value={this.state.low}
-              valueStyle={{ color: "green", textAlign: "center" }}
-              prefix={<FallOutlined />}
-            ></Statistic>
-          </Col>
-          <Col span={3}>
-            <Statistic
-              title="New Defects"
-              style={{ textAlign: "center" }}
-              value={this.state.newdef}
-              valueStyle={{ color: "blue", textAlign: "center" }}
-              prefix={<RadarChartOutlined />}
-            ></Statistic>
-          </Col>
-          <Col span={3}>
-            <Statistic
-              title="Total Defects"
-              style={{ textAlign: "center" }}
-              value={this.state.data.length}
-              valueStyle={{ color: "magenta", textAlign: "center" }}
-              prefix={<BugOutlined />}
-            ></Statistic>
-          </Col>
-        </Row>
+      <Fragment>        
         <br></br>
         <Table
           columns={columns}
           dataSource={this.state.data}
-          onChange={this.filterHandleChange}
+          onChange={this.filterHandleChange}  
+          loading={this.state.load}        
         />
 
         <Drawer
@@ -1020,11 +970,11 @@ export class ViewDefectDetails extends Component {
         >
           {this.renderDrawer(drawerData)}
         </Drawer>
-        <AddDefectDetailsForm show={this.state.show} data={this.state.data} />
+        
 
         <Modal
           footer ={[
-            
+             
           ]}
           style = {{ top: 40 }}
           width="90%"

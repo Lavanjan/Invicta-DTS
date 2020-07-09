@@ -3,11 +3,19 @@ import ReactDOM from "react-dom";
 import { Link } from "react-router-dom";
 import { Table, Input, Button, Space, Tag } from "antd";
 import Highlighter from "react-highlight-words";
-import { SearchOutlined } from "@ant-design/icons";
 import "antd/dist/antd.css";
 import { Drawer, Form, Col, Row, Select, DatePicker } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
-
+import {
+  SearchOutlined,
+  FallOutlined,
+  RiseOutlined,
+  StockOutlined,
+  BugOutlined,
+  EditOutlined,
+  RadarChartOutlined,
+  FolderViewOutlined,
+} from "@ant-design/icons";
 
 const { Option } = Select;
 
@@ -23,6 +31,12 @@ export class ViewEmployee extends Component {
       show:false
     };
   }  
+  onClickView=()=>{
+    this.setState({
+      show:true
+    })
+  }
+
   getColumnSearchProps = (dataIndex) => ({
     filterDropdown: ({
       setSelectedKeys,
@@ -132,13 +146,31 @@ export class ViewEmployee extends Component {
         dataIndex: "employeeDepartment",
         key: "employeeDepartment",
         ...this.getColumnSearchProps("Department"),
-      },     
+      },
+      {
+        title: "Edit",
+        // dataIndex: "view",
+        key: "edit",
+        render: (record = this.state.selectedRows) => (
+          <a onClick={() => this.onClickEdit(record)}>
+            <EditOutlined />
+          </a>
+        ),
+      },
+      {
+        title: "View",
+        key: "view",
+        render: (viewRecord = this.state.selectedRows) => (
+          <a onClick={() => this.onClickView(viewRecord)}>
+            <FolderViewOutlined style={{ color: "red" }} />
+          </a>
+        ),
+      },   
     ];
     
     return (
       <Fragment>
-        <div>    
-    
+        <div>   
           <Table columns={columns} dataSource={this.props.employees} />
         </div>        
       </Fragment>
