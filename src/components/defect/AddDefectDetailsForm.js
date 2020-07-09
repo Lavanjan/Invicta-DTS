@@ -139,14 +139,14 @@ export class AddDefectDetailsForm extends Component {
 
                             <Col span={12}>
                                 <Form.Item>
-                                    <Text style={{ fontSize: 15, color: "black" }}>Defect ID : </Text>
-                                    <Tag color="#2db7f5" name="defectId" style={{ fontSize: 15, color: "black" }}>{this.props.data.length + 1}</Tag>
+                                    <Text mark style={{ fontSize: 15, color: "black" }}>Defect ID : </Text>
+                                    <Text mark  name="defectId" style={{ fontSize: 15, color: "black" }}>{this.props.data.length + 1}</Text>
                                 </Form.Item>
                             </Col>
                             <Col span={12}>
                                 <Form.Item>
-                                    <Text style={{ fontSize: 15, color: "black", marginLeft: 210 }}>Status : </Text>
-                                    <Tag color="#2db7f5" name="status" style={{ fontSize: 15, color: "black" }}>NEW</Tag>
+                                    <Text mark style={{ fontSize: 15, color: "black", marginLeft: 210 }}>Status : </Text>
+                                    <Text mark name="status" style={{ fontSize: 15, color: "black" }}>NEW</Text>
                                 </Form.Item>
                             </Col>
 
